@@ -42,8 +42,10 @@ describe("httpbin worker", async () => {
   });
 
   it("redirect invalid number", async () => {
-    const response = await fetch(`${ROOT}/redirect/abc`);
-    expect(response.status).toBe(400);
+    for (const invalid of ["-1", "abc", ""]) {
+      const response = await fetch(`${ROOT}/redirect/${invalid}`);
+      expect(response.status).toBe(400);
+    }
   });
 
   it("response-headers", async () => {

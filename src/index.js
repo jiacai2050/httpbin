@@ -65,6 +65,9 @@ async function handle(req, env, ctx) {
         throw new CustomError("Redirect count is required", 400);
       }
       let count = Math.min(10, stringToNumber(parts[1]));
+      if (count <= 0) {
+        throw new CustomError("Redirect count must be a positive number", 400);
+      }
       count -= 1;
       const location = count === 0 ? "/get" : `/redirect/${count}`;
       return Response.redirect(new URL(location, req.url), 302);
