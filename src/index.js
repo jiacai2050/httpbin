@@ -75,7 +75,7 @@ async function handle(req, env, ctx) {
         headers[key] = value;
       }
       return Response.json(
-        { ...headers, ...Object.fromEntries(req.headers) },
+        { ...Object.fromEntries(req.headers), ...headers },
         { headers },
       );
     }
