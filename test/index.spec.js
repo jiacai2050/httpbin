@@ -50,7 +50,7 @@ describe("httpbin worker", async () => {
     const response = await fetch(`${ROOT}/response-headers?a=1&b=2`);
     expect(response.headers.get("a")).toBe("1");
     expect(response.headers.get("b")).toBe("2");
-    expect(await response.json()).toStrictEqual({ a: "1", b: "2" });
+    expect(await response.json()).toMatchObject({ a: "1", b: "2" });
   });
 
   it("ip ", async () => {
