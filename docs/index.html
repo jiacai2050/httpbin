@@ -67,23 +67,23 @@
                 Returns anything you send in the request (GET, POST, etc.).
             </li>
             <li>
-                <pre><a href="/delay?seconds=3">/delay?seconds=3</a></pre>
+                <pre><a href="/delay?seconds=3">/delay?seconds=:number</a></pre>
                 Delays the response by the specified number of seconds (max 10).
             </li>
             <li>
-                <pre><a href="/redirect-to">/redirect-to?url=http://example.com</a></pre>
+                <pre><a href="/redirect-to?url=http://example.com">/redirect-to?url=:new-url</a></pre>
                 Redirects to the specified URL.
             </li>
             <li>
-                <pre><a href="/redirect/3">/redirect/3</a></pre>
-                Redirects 3 times before landing on /get.
+                <pre><a href="/redirect/3">/redirect/:number</a></pre>
+                Redirects N times before landing on /get.
             </li>
             <li>
                 <pre><a href="/response-headers?freeform=123&another=456">/response-headers?freeform=123&another=456</a></pre>
                 Returns the headers you specify as query parameters.
             </li>
             <li>
-                <pre><a href="/status/200">/status/200</a></pre>
+                <pre><a href="/status/200">/status/:code</a></pre>
                 Returns a response with the specified status code.
             </li>
             <li>

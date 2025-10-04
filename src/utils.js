@@ -40,3 +40,18 @@ export function arrayBufferToBase64(buffer) {
   // 注意：btoa 仅适用于 ASCII 字符串，但对于 ArrayBuffer 转换而来的二进制字符串是有效的。
   return btoa(binary);
 }
+
+// Strictly convert a string to a number, throwing an error if conversion fails
+export function stringToNumber(str) {
+  const num = Number(str); // Attempt to convert the string to a number
+
+  // Check if the result is NaN (Not-a-Number)
+  // Number.isNaN() is preferred over global isNaN() as it doesn't coerce the value to a number first.
+  if (Number.isNaN(num)) {
+    throw new CustomError(
+      `Invalid input: "${str}" cannot be converted to a number.`,
+      400,
+    );
+  }
+  return num;
+}
