@@ -1,0 +1,105 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>httpbin - A simple HTTP Request & Response Service</title>
+    <meta
+        name="description"
+        content="A simple HTTP Request & Response Service, similar to httpbin but built with Cloudflare Workers.."
+    />
+    <meta
+        name="keywords"
+        content="httpbin,http request,response service,api,restful,cloudflare workers"
+    />
+    <link rel="icon" href="https://liujiacai.net/favicon.ico" />
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css" />
+</head>
+
+<body>
+    <header>
+        <h1>httpbin</h1>
+        <p>A simple HTTP Request & Response Service</p>
+        <small>
+            Similar to <a href="https://httpbin.org">httpbin.org</a> but built
+            with Cloudflare Workers.
+        </small>
+    </header>
+    <main>
+        <p>
+            A hosted version is available for free:
+            <code>https://httpbin.liujiacai.net</code>
+            <br />
+            You can also deploy your own instance with the button below:
+        </p>
+        <p>
+            <a
+                target="_blank"
+                href="https://deploy.workers.cloudflare.com/?url=https%3A%2F%2Fgithub.com%2Fjiacai2050%2Fhttpbin"
+            >
+                <center>
+                    <img
+                        src="https://deploy.workers.cloudflare.com/button"
+                        alt="Deploy to Cloudflare"
+                    />
+                </center>
+            </a>
+        </p>
+        <h2 id="endpoints">Available Endpoints</h2>
+        <ol>
+            <li>
+                <pre><a href="/get">/get</a></pre>
+                Returns GET data.
+            </li>
+            <li>
+                <pre><a href="/ip">/ip</a></pre>
+                Returns your IP address.
+            </li>
+            <li>
+                <pre><a href="/headers">/headers</a></pre>
+                Returns request headers.
+            </li>
+            <li>
+                <pre><a href="/user-agent">/user-agent</a></pre>
+                Returns your User-Agent string.
+            </li>
+            <li>
+                <pre><a href="/anything">/anything</a></pre>
+                Returns anything you send in the request (GET, POST, etc.).
+            </li>
+            <li>
+                <pre><a href="/delay?seconds=3">/delay?seconds=3</a></pre>
+                Delays the response by the specified number of seconds (max 10).
+            </li>
+            <li>
+                <pre><a href="/redirect-to">/redirect-to?url=http://example.com</a></pre>
+                Redirects to the specified URL.
+            </li>
+            <li>
+                <pre><a href="/redirect/3">/redirect/3</a></pre>
+                Redirects 3 times before landing on /get.
+            </li>
+            <li>
+                <pre><a href="/response-headers?freeform=123&another=456">/response-headers?freeform=123&another=456</a></pre>
+                Returns the headers you specify as query parameters.
+            </li>
+            <li>
+                <pre><a href="/status/200">/status/200</a></pre>
+                Returns a response with the specified status code.
+            </li>
+            <li>
+                <pre><a href="/cookies">/cookies</a></pre>
+                Returns the cookies you sent.
+            </li>
+        </ol>
+        <p>
+            For <code>/anything</code>, you can send various types of data
+            including JSON, form data, and files.
+        </p>
+    </main>
+    <footer>
+        &copy; 2025 <a href="https://liujiacai.net/">Jiacai Liu</a> |
+        <a href="https://github.com/jiacai2050/httpbin">GitHub</a>
+        <br />
+        Powered by Cloudflare Workers
+    </footer>
+</body>
