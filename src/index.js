@@ -1,12 +1,30 @@
-import { CustomError, arrayBufferToBase64 } from "./utils.js";
+import { CustomError, arrayBufferToBase64, stringToNumber } from "./utils.js";
 
 export default {
-  async fetch(request, env, ctx) {
-    return await handle(request);
+  async fetch(req, env, ctx) {
+    try {
+      return await handle(req, env, ctx);
+    } catch (err) {
+      if (err instanceof CustomError) {
+        return Response.json(
+          { message: err.message, code: err.code, url: req.url },
+          { status: err.code },
+        );
+      }
+      console.error(
+        `Handle request failed, err:${err.message}, url:${req.url}, stack:${err.stack}`,
+      );
+      return new Response(`<h1>${err.message}</h1><p>${err.stack}</p>`, {
+        status: 500,
+        headers: new Headers({
+          "Content-Type": "text/html; charset=utf-8",
+        }),
+      });
+    }
   },
 };
 
-async function handle(req) {
+async function handle(req, env, ctx) {
   const { pathname, searchParams } = new URL(req.url);
   const parts = pathname.split("/");
   if (parts.length > 0 && parts[0] === "") {
@@ -46,25 +64,20 @@ async function handle(req) {
       if (parts.length === 1) {
         throw new CustomError("Redirect count is required", 400);
       }
-      let countStr = parts[1];
-      if (!/^\d+$/.test(countStr)) {
-        throw new CustomError("Redirect count must be a number", 400);
-      }
-      let count = parseInt(countStr);
-      if (count > 10) {
-        throw new CustomError("Max redirect count is 10", 400);
-      }
+      let count = Math.min(10, stringToNumber(parts[1]));
       count -= 1;
       const location = count === 0 ? "/get" : `/redirect/${count}`;
-      const newUrl = new URL(location, req.url);
-      return Response.redirect(newUrl, 302);
+      return Response.redirect(new URL(location, req.url), 302);
     }
     case "response-headers": {
-      const headers = Object.fromEntries(req.headers);
+      const headers = {};
       for (const [key, value] of searchParams) {
         headers[key] = value;
       }
-      return Response.json(headers);
+      return Response.json(
+        { ...headers, ...Object.fromEntries(req.headers) },
+        { headers },
+      );
     }
     case "cookies": {
       const cookies = {};
@@ -81,11 +94,7 @@ async function handle(req) {
       if (parts.length === 1) {
         throw new CustomError("Status code is required", 400);
       }
-      let codeStr = parts[1];
-      if (!/^\d{3}$/.test(codeStr)) {
-        throw new CustomError("Status code must be a 3-digit number", 400);
-      }
-      const code = parseInt(codeStr);
+      const code = stringToNumber(parts[1]);
       return Response.json({ code: code }, { status: code });
     }
   }
