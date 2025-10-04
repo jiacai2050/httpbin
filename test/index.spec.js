@@ -41,8 +41,8 @@ describe("httpbin worker", async () => {
     }
   });
 
-  it("redirect-to invalid number", async () => {
-    const response = await fetch(`${ROOT}/redirect-to/abc`);
+  it("redirect invalid number", async () => {
+    const response = await fetch(`${ROOT}/redirect/abc`);
     expect(response.status).toBe(400);
   });
 

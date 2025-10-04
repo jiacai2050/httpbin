@@ -15,7 +15,7 @@ export default {
         `Handle request failed, err:${err.message}, url:${req.url}, stack:${err.stack}`,
       );
       return new Response(`<h1>${err.message}</h1><p>${err.stack}</p>`, {
-        status: 500,
+        status: 499,
         headers: new Headers({
           "Content-Type": "text/html; charset=utf-8",
         }),
