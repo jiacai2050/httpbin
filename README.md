@@ -73,8 +73,12 @@ Output:
 - `/html`: Returns a sample HTML document
 - `/json`: Returns a sample JSON document
 - `/gzip`: Returns a gzip-encoded response
+- `/brotli`: Returns a brotli-encoded response
 - `/deflate`: Returns a deflate-encoded response
 - `/anything/:anything`: Returns anything that was sent in the request
+- `/cookies`: Returns the requester's cookies
+- `/cookies/set?name=value`: Sets cookies and redirects to `/cookies`
+- `/cookies/delete?name=value`: Deletes cookies and redirects to `/cookies`
 - `/image/:type`: Returns a random image of the given type (png, jpeg, webp, svg)
 
 If you notice any endpoint missing or unexpected behavior, please [open an issue](https://github.com/jiacai2050/httpbin/issues) or [submit a pull request](https://github.com/jiacai2050/httpbin/pulls).

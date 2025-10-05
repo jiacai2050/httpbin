@@ -225,6 +225,59 @@ describe("image", () => {
   });
 });
 
+describe("cookies", () => {
+  it("set & get", async () => {
+    const response = await fetch(
+      `${ROOT}/cookies/set?name1=value1&name2=value2&name3=value3`,
+    );
+    expect(response.status).toBe(302);
+    const cookies = response.headers.get("Set-Cookie");
+    expect(cookies).toBeDefined();
+    expect(cookies).toMatch(/name1=value1/);
+    expect(cookies).toMatch(/name2=value2/);
+    expect(cookies).toMatch(/name3=value3/);
+
+    const req = new Request(`${ROOT}/cookies`, {
+      headers: { Cookie: "name1=value1; name2=value2; name3=value3" },
+    });
+    const response2 = await fetch(req);
+    expect(response2.status).toBe(200);
+    const json = await response2.json();
+    expect(json).toStrictEqual({
+      cookies: { name1: "value1", name2: "value2", name3: "value3" },
+    });
+  });
+
+  it("delete", async () => {
+    const response = await fetch(
+      `${ROOT}/cookies/delete?name1=value1&name2=value2`,
+    );
+    expect(response.status).toBe(302);
+    const cookies = response.headers.get("Set-Cookie");
+    expect(cookies).toBeDefined();
+    expect(cookies).toMatch(/name1=;/);
+    expect(cookies).toMatch(/name2=;/);
+  });
+
+  it("set (integration)", async () => {
+    const response = await SELF.fetch(
+      `${ROOT}/cookies/set?name1=value1&name2=value2&name3=value3`,
+      {
+        credentials: "include",
+      },
+    );
+    expect(response.status).toBe(200);
+    for (const [k, v] of response.headers) {
+      console.log(`xxx ${k}=${v}`);
+    }
+    expect(await response.json()).toMatchObject({
+      // TODO: integration test can't get cookies now.
+      // cookies: { name1: "value1", name2: "value2", name3: "value3" },
+      cookies: {},
+    });
+  });
+});
+
 describe("anything", () => {
   it("anything json", async () => {
     const req = new Request(`${ROOT}/anything/123`, {

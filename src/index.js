@@ -180,17 +180,8 @@ async function handle(req, env, ctx) {
     }
 
     // Cookies: Returns the cookies sent in the request
-    case "cookies": {
-      const cookies = {};
-      req.headers
-        .get("Cookie")
-        ?.split(";")
-        .forEach((cookie) => {
-          const [name, ...rest] = cookie.split("=");
-          cookies[name.trim()] = rest.join("=").trim();
-        });
-      return Response.json(cookies);
-    }
+    case "cookies":
+      return handleCookies(parts, searchParams, req);
 
     // Images
     case "image":
@@ -216,10 +207,7 @@ async function handle(req, env, ctx) {
       const location = count === 0 ? "/get" : `/redirect/${count}`;
       return new Response(null, {
         status: 302,
-        headers: {
-          Location: location,
-          "content-type": "text/html; charset=utf-8",
-        },
+        headers: { Location: location },
       });
     }
 
@@ -257,6 +245,42 @@ function handleBasicAuth(parts, searchParams, req) {
     });
   }
   return Response.json({ authenticated: true, user: username });
+}
+
+function handleCookies(parts, searchParams, req) {
+  if (parts.length === 1) {
+    const cookies = {};
+    req.headers
+      .get("Cookie")
+      ?.split(";")
+      .forEach((cookie) => {
+        const [name, ...rest] = cookie.split("=");
+        cookies[name.trim()] = rest.join("=").trim();
+      });
+    return Response.json({ cookies });
+  }
+  const action = parts[1];
+  switch (action) {
+    case "set": {
+      const headers = new Headers({ Location: "/cookies" });
+      for (const [key, value] of searchParams) {
+        headers.append("Set-Cookie", `${key}=${value}; Path=/`);
+      }
+      return new Response(null, { status: 302, headers });
+    }
+    case "delete": {
+      const headers = new Headers({ Location: "/cookies" });
+      for (const [key, _] of searchParams) {
+        headers.append(
+          "Set-Cookie",
+          `${key}=; Expires=Thu, 01-Jan-1970 00:00:00 GMT; Max-Age=0; Path=/`,
+        );
+      }
+      return new Response(null, { status: 302, headers });
+    }
+    default:
+      throw new CustomError(`Unknown cookie action: ${action}`, 400);
+  }
 }
 
 function handleImage(parts, searchParams, req, env) {
