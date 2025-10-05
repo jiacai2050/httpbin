@@ -103,14 +103,17 @@ describe("Request Inspection", () => {
 
 describe("Response Inspection", () => {
   it("response-headers", async () => {
-    const response = await fetch(`${ROOT}/response-headers?a=1&b=2&c=3&c=4`);
+    const req = new Request(`${ROOT}/response-headers?a=1&b=2&c=3&c=4`, {
+      headers: { C: "5" },
+    });
+    const response = await fetch(req);
     expect(response.headers.get("a")).toBe("1");
     expect(response.headers.get("b")).toBe("2");
     expect(response.headers.get("c")).toBe("3, 4");
     expect(await response.json()).toMatchObject({
       a: "1",
       b: "2",
-      c: ["3", "4"],
+      c: ["5", "3", "4"],
     });
   });
 

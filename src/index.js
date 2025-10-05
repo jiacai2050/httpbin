@@ -67,13 +67,8 @@ async function handle(req, env, ctx) {
     }
 
     // Request inspection: Inspecting the request data
-    case "headers": {
-      const headers = {};
-      for (const [k, v] of req.headers) {
-        headers[toHeaderCase(k)] = v;
-      }
-      return Response.json(headers);
-    }
+    case "headers":
+      return Response.json(Object.fromEntries(req.headers));
     case "ip":
     case "ipgeo":
       return handleIp(req);
@@ -85,12 +80,7 @@ async function handle(req, env, ctx) {
     // Response inspection: Inspecting the response data
     case "response-headers": {
       const bodyHeaders = {};
-      for (const [k, v] of req.headers) {
-        bodyHeaders[toHeaderCase(k)] = v;
-      }
-      const headers = new Headers();
-      for (const [key, value] of searchParams) {
-        headers.append(key, value);
+      for (const [key, value] of [...req.headers, ...searchParams]) {
         if (bodyHeaders.hasOwnProperty(key)) {
           if (Array.isArray(bodyHeaders[key])) {
             bodyHeaders[key].push(value);
@@ -100,6 +90,10 @@ async function handle(req, env, ctx) {
         } else {
           bodyHeaders[key] = value;
         }
+      }
+      const headers = new Headers();
+      for (const [key, value] of searchParams) {
+        headers.append(key, value);
       }
       return Response.json(bodyHeaders, { headers });
     }
@@ -429,12 +423,4 @@ async function readRequestBody(request) {
     const dataUrl = `data:${contentType};base64,${base64String}`;
     return { data: dataUrl };
   }
-}
-
-function toHeaderCase(header) {
-  return header
-    .toLowerCase()
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join("-");
 }

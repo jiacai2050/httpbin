@@ -21,6 +21,7 @@ GET :BASE/status/100
 
 #
 GET :BASE/response-headers?freeform=123&freeform=456&freeform=789&another=1
+Accept:application/json
 
 #
 :HTTPBIN = https://httpbin.org
