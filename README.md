@@ -1,7 +1,7 @@
 ## [httpbin](https://github.com/jiacai2050/httpbin)
 
 <p align="center">
-  <img src="docs/logo.svg" />
+  <img src="docs/logo.svg" width="30%" />
 </p>
 
 A simple HTTP Request & Response Service, which is a great tool for testing HTTP libraries.
