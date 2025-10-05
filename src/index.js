@@ -79,14 +79,23 @@ async function handle(req, env, ctx) {
 
     // Response inspection: Inspecting the response data
     case "response-headers": {
-      const headers = {};
-      for (const [key, value] of searchParams) {
-        headers[key] = value;
+      const bodyHeaders = {};
+      for (const [key, value] of [...req.headers, ...searchParams]) {
+        if (bodyHeaders.hasOwnProperty(key)) {
+          if (Array.isArray(bodyHeaders[key])) {
+            bodyHeaders[key].push(value);
+          } else {
+            bodyHeaders[key] = [bodyHeaders[key], value];
+          }
+        } else {
+          bodyHeaders[key] = value;
+        }
       }
-      return Response.json(
-        { ...Object.fromEntries(req.headers), ...headers },
-        { headers },
-      );
+      const headers = new Headers();
+      for (const [key, value] of searchParams) {
+        headers.append(key, value);
+      }
+      return Response.json(bodyHeaders, { headers });
     }
     case "cache":
       return handleCache(parts, searchParams, req);
@@ -205,7 +214,13 @@ async function handle(req, env, ctx) {
       }
       count -= 1;
       const location = count === 0 ? "/get" : `/redirect/${count}`;
-      return Response.redirect(new URL(location, req.url), 302);
+      return new Response(null, {
+        status: 302,
+        headers: {
+          Location: location,
+          "content-type": "text/html; charset=utf-8",
+        },
+      });
     }
 
     // Anything: Accepts any request data and returns it back in JSON format
