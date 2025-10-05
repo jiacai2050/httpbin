@@ -58,7 +58,7 @@ async function handle(req, env, ctx) {
         });
       }
       const token = auth.substring(7);
-      return Response.json({ authenticated: true, token: token });
+      return Response.json({ authenticated: true, token });
     }
     // Status codes: Returning responses with specific HTTP status codes
     case "status": {
