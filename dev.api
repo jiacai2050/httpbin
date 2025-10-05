@@ -20,9 +20,16 @@ GET :BASE/bearer
 GET :BASE/status/100
 
 #
+GET :BASE/response-headers?freeform=123&freeform=456&freeform=789&another=1
+
+#
 :HTTPBIN = https://httpbin.org
 #
 GET :HTTPBIN/get
+#
+GET :HTTPBIN/user-agent
+#
+GET :HTTPBIN/headers
 #
 POST :HTTPBIN/post
 #
@@ -36,3 +43,6 @@ GET :HTTPBIN/encoding/utf8
 GET :HTTPBIN/html
 #
 GET :HTTPBIN/bearer
+
+#
+GET :HTTPBIN/response-headers?freeform=123&freeform=456

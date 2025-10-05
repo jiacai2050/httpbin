@@ -67,8 +67,13 @@ async function handle(req, env, ctx) {
     }
 
     // Request inspection: Inspecting the request data
-    case "headers":
-      return Response.json(Object.fromEntries(req.headers));
+    case "headers": {
+      const headers = {};
+      for (const [k, v] of req.headers) {
+        headers[toHeaderCase(k)] = v;
+      }
+      return Response.json(headers);
+    }
     case "ip":
     case "ipgeo":
       return handleIp(req);
@@ -79,14 +84,24 @@ async function handle(req, env, ctx) {
 
     // Response inspection: Inspecting the response data
     case "response-headers": {
-      const headers = {};
-      for (const [key, value] of searchParams) {
-        headers[key] = value;
+      const bodyHeaders = {};
+      for (const [k, v] of req.headers) {
+        bodyHeaders[toHeaderCase(k)] = v;
       }
-      return Response.json(
-        { ...Object.fromEntries(req.headers), ...headers },
-        { headers },
-      );
+      const headers = new Headers();
+      for (const [key, value] of searchParams) {
+        headers.append(key, value);
+        if (bodyHeaders.hasOwnProperty(key)) {
+          if (Array.isArray(bodyHeaders[key])) {
+            bodyHeaders[key].push(value);
+          } else {
+            bodyHeaders[key] = [bodyHeaders[key], value];
+          }
+        } else {
+          bodyHeaders[key] = value;
+        }
+      }
+      return Response.json(bodyHeaders, { headers });
     }
     case "cache":
       return handleCache(parts, searchParams, req);
@@ -205,7 +220,13 @@ async function handle(req, env, ctx) {
       }
       count -= 1;
       const location = count === 0 ? "/get" : `/redirect/${count}`;
-      return Response.redirect(new URL(location, req.url), 302);
+      return new Response(null, {
+        status: 302,
+        headers: {
+          Location: location,
+          "content-type": "text/html; charset=utf-8",
+        },
+      });
     }
 
     // Anything: Accepts any request data and returns it back in JSON format
@@ -408,4 +429,12 @@ async function readRequestBody(request) {
     const dataUrl = `data:${contentType};base64,${base64String}`;
     return { data: dataUrl };
   }
+}
+
+function toHeaderCase(header) {
+  return header
+    .toLowerCase()
+    .split("-")
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .join("-");
 }

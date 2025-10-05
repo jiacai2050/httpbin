@@ -103,10 +103,15 @@ describe("Request Inspection", () => {
 
 describe("Response Inspection", () => {
   it("response-headers", async () => {
-    const response = await fetch(`${ROOT}/response-headers?a=1&b=2`);
+    const response = await fetch(`${ROOT}/response-headers?a=1&b=2&c=3&c=4`);
     expect(response.headers.get("a")).toBe("1");
     expect(response.headers.get("b")).toBe("2");
-    expect(await response.json()).toMatchObject({ a: "1", b: "2" });
+    expect(response.headers.get("c")).toBe("3, 4");
+    expect(await response.json()).toMatchObject({
+      a: "1",
+      b: "2",
+      c: ["3", "4"],
+    });
   });
 
   it("cache", async () => {
@@ -188,9 +193,9 @@ describe("redirect", () => {
       expect(response.status).toBe(302);
       const location = response.headers.get("Location");
       if (i > 1) {
-        expect(location).toBe(`${ROOT}/redirect/${i - 1}`);
+        expect(location).toBe(`/redirect/${i - 1}`);
       } else {
-        expect(location).toBe(`${ROOT}/get`);
+        expect(location).toBe(`/get`);
       }
     }
   });
