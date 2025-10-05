@@ -1,0 +1,38 @@
+# -*- mode: restclient-mode; -*-
+
+:BASE = http://localhost:8787
+
+#
+GET :BASE/get
+#
+GET :BASE/headers
+#
+GET :BASE/ip
+#
+GET :BASE/cache/20
+#
+GET :BASE/encoding/utf8
+#
+GET :BASE/json
+#
+GET :BASE/bearer
+#
+GET :BASE/status/100
+
+#
+:HTTPBIN = https://httpbin.org
+#
+GET :HTTPBIN/get
+#
+POST :HTTPBIN/post
+#
+GET :HTTPBIN/cache
+
+#
+GET :HTTPBIN/brotli
+#
+GET :HTTPBIN/encoding/utf8
+#
+GET :HTTPBIN/html
+#
+GET :HTTPBIN/bearer
