@@ -3,7 +3,25 @@ import { CustomError, arrayBufferToBase64, stringToNumber } from "./utils.js";
 export default {
   async fetch(req, env, ctx) {
     try {
-      return await handle(req, env, ctx);
+      const resp = await handle(req, env, ctx);
+      const newResp = new Response(resp.body, resp);
+      // Ensure CORS headers are set on all responses
+      const origin = newResp.headers.get("Origin");
+      if (origin) {
+        newResp.headers.set("Access-Control-Allow-Origin", origin);
+        newResp.headers.set("Access-Control-Allow-Credentials", "true");
+      } else {
+        newResp.headers.set("Access-Control-Allow-Origin", "*");
+      }
+      newResp.headers.set(
+        "Access-Control-Allow-Methods",
+        "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      );
+      newResp.headers.set(
+        "Access-Control-Allow-Headers",
+        "Content-Type, Authorization",
+      );
+      return newResp;
     } catch (err) {
       if (err instanceof CustomError) {
         return Response.json(
