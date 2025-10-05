@@ -70,6 +70,7 @@ async function handle(req, env, ctx) {
     case "headers":
       return Response.json(Object.fromEntries(req.headers));
     case "ip":
+    case "ipgeo":
       return handleIp(req);
     case "user-agent":
       return Response.json({
