@@ -283,7 +283,7 @@ function handleImage(parts, searchParams, req, env) {
 }
 
 function handleCache(parts, searchParams, req) {
-  if (parts.length === 0) {
+  if (parts.length === 1) {
     // /cache
     // Returns a 304 if an If-Modified-Since header or If-None-Match is present. Returns the same as a GET otherwise.
     if (
