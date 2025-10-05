@@ -11,7 +11,7 @@ GET :BASE/ip
 #
 GET :BASE/cache/20
 #
-GET :BASE/encoding/utf89
+GET :BASE/encoding/utf8
 #
 GET :BASE/json
 #

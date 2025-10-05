@@ -55,6 +55,3 @@ export function stringToNumber(str) {
   }
   return num;
 }
-
-// [/path, number]
-export function extractNumber(parts) {}
