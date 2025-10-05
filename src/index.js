@@ -14,15 +14,12 @@ export default {
       console.error(
         `Handle request failed, err:${err.message}, url:${req.url}, stack:${err.stack}`,
       );
-      return new Response(
-        `<h1>${err.message}</h1><p><pre>${err.stack}</pre></p>`,
-        {
-          status: 499,
-          headers: new Headers({
-            "Content-Type": "text/html; charset=utf-8",
-          }),
-        },
-      );
+      return new Response(`<h1>${err.message}</h1><pre>${err.stack}</pre>`, {
+        status: 499,
+        headers: new Headers({
+          "Content-Type": "text/html; charset=utf-8",
+        }),
+      });
     }
   },
 };
@@ -125,17 +122,19 @@ async function handle(req, env, ctx) {
       }
       const delay = Math.min(stringToNumber(parts[1]), 10);
       await new Promise((resolve) => setTimeout(resolve, delay * 1000));
-      return Response.json({
-        delay: delay,
-      });
+      return Response.json({ delay });
     }
     case "bytes": {
       if (parts.length === 1) {
         throw new CustomError("Bytes count is required", 400);
       }
       const count = stringToNumber(parts[1]);
-      if (count <= 0 || count > 64 * 1024) {
-        throw new CustomError("Bytes count must be in range [1, 65536]", 400);
+      const MAX_BYTES = 64 * 1024;
+      if (count <= 0 || count > MAX_BYTES) {
+        throw new CustomError(
+          `Bytes count must be in range [1, ${MAX_BYTES}]`,
+          400,
+        );
       }
       const array = new Uint8Array(count);
       crypto.getRandomValues(array);
