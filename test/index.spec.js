@@ -9,12 +9,166 @@ import worker from "../src";
 
 // https://developers.cloudflare.com/workers/testing/vitest-integration/write-your-first-test/
 const ROOT = "https://httpbin.liujiacai.net";
-describe("httpbin worker", async () => {
-  it("index page", async () => {
-    const response = await fetch(`${ROOT}`);
-    expect(await response.text()).toContain(`httpbin`);
+describe("http methonds", () => {
+  it("200", async () => {
+    for (const method of ["get", "post", "put", "patch", "delete"]) {
+      const request = new Request(`${ROOT}/${method}`, { method: method });
+      const response = await fetch(request);
+      expect(response.status).toBe(200);
+    }
+  });
+});
+
+describe("Basic Auth", () => {
+  it("no header", async () => {
+    let response = await fetch(`${ROOT}/basic-auth/admin/123`);
+    expect(response.status).toBe(401);
+    expect(response.headers.get("WWW-Authenticate")).toStrictEqual(
+      `Basic realm="Fake Realm"`,
+    );
+  });
+  it("wrong token", async () => {
+    const req = new Request(`${ROOT}/basic-auth/admin/123`, {
+      headers: { Authorization: `Basic ${btoa("admin:wrong")}` },
+    });
+    let response = await fetch(req);
+    expect(response.status).toBe(401);
+    expect(response.headers.get("WWW-Authenticate")).toStrictEqual(
+      `Basic realm="Fake Realm"`,
+    );
+  });
+  it("success", async () => {
+    const req = new Request(`${ROOT}/basic-auth/admin/123`, {
+      headers: { Authorization: `Basic ${btoa("admin:123")}` },
+    });
+    let response = await fetch(req);
+    expect(response.status).toBe(200);
+    expect(await response.json()).toStrictEqual({
+      authenticated: true,
+      user: "admin",
+    });
+  });
+});
+
+describe("Bearer auth", () => {
+  it("no header", async () => {
+    let response = await fetch(`${ROOT}/bearer`);
+    expect(response.status).toBe(401);
+    expect(response.headers.get("WWW-Authenticate")).toStrictEqual(`Bearer`);
+  });
+  it("success", async () => {
+    const req = new Request(`${ROOT}/bearer`, {
+      headers: { Authorization: `Bearer 12345` },
+    });
+    let response = await fetch(req);
+    expect(response.status).toBe(200);
+    expect(await response.json()).toStrictEqual({
+      authenticated: true,
+      token: "12345",
+    });
+  });
+});
+
+describe("Status code", () => {
+  it("normal ", async () => {
+    // [200, 599]
+    for (const code of [200, 300, 400, 500]) {
+      const response = await fetch(`${ROOT}/status/${code}`);
+      expect(response.status).toBe(code);
+    }
+  });
+  it("invalid", async () => {
+    let response = await fetch(`${ROOT}/status/abc`);
+    expect(response.status).toBe(400);
+    response = await fetch(`${ROOT}/status/100`);
+    expect(response.status).toBe(499);
+  });
+});
+
+describe("Request Inspection", () => {
+  it("user-agent", async () => {
+    const req = new Request(`${ROOT}/user-agent`, {
+      headers: { "User-Agent": `Cloudflare Workers` },
+    });
+    const response = await fetch(req);
+    expect(response.status).toBe(200);
+    const json = await response.json();
+    expect(json).toStrictEqual({ "user-agent": "Cloudflare Workers" });
+  });
+  it("ip", async () => {
+    const response = await fetch(`${ROOT}/ip`);
+    expect(response.status).toBe(200);
+  });
+});
+
+describe("Response Inspection", () => {
+  it("response-headers", async () => {
+    const response = await fetch(`${ROOT}/response-headers?a=1&b=2`);
+    expect(response.headers.get("a")).toBe("1");
+    expect(response.headers.get("b")).toBe("2");
+    expect(await response.json()).toMatchObject({ a: "1", b: "2" });
   });
 
+  it("cache", async () => {
+    const response = await fetch(`${ROOT}/cache/3600`);
+    expect(response.status).toBe(200);
+    expect(response.headers.get("Cache-Control")).toStrictEqual(
+      "public, max-age=3600",
+    );
+  });
+});
+
+describe("Response formats", () => {
+  it("json", async () => {
+    const response = await fetch(`${ROOT}/json`);
+    expect(response.status).toBe(200);
+    expect(response.headers.get("Content-Type")).toMatch(/application\/json/);
+  });
+  it("xml", async () => {
+    const response = await fetch(`${ROOT}/xml`);
+    expect(response.status).toBe(200);
+    expect(response.headers.get("Content-Type")).toMatch(/application\/xml/);
+  });
+});
+
+describe("Dynamic data", () => {
+  it("gen bytes", async () => {
+    for (const size of [10, 100, 1000, 10000]) {
+      const response = await fetch(`${ROOT}/bytes/${size}`);
+      expect(response.status).toBe(200);
+      const arrayBuffer = await response.arrayBuffer();
+      expect(arrayBuffer.byteLength).toBe(size);
+    }
+
+    const response = await fetch(`${ROOT}/bytes/65537`);
+    expect(response.status, await response.text()).toBe(400);
+  });
+
+  it("base64", async () => {
+    const response = await fetch(`${ROOT}/base64/SFRUUEJJTiBpcyBhd2Vzb21l`);
+    expect(response.status).toBe(200);
+    const text = await response.text();
+    expect(text).toBe("HTTPBIN is awesome");
+  });
+
+  it("gzip", async () => {
+    const response = await fetch(`${ROOT}/gzip`);
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-encoding")).toBe("gzip");
+    const json = await response.json();
+    expect(json["gzipped"]).toBe(true);
+  });
+
+  it("gzip integration", async () => {
+    const response = await SELF.fetch(`${ROOT}/gzip`);
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-encoding")).toBe("gzip");
+    const json = await response.json();
+    expect(json["gzipped"]).toBe(true);
+  });
+});
+
+describe("redirect", () => {
   it("redirect-to success", async () => {
     const response = await fetch(
       `${ROOT}/redirect-to?url=http://httpbin.org/ip`,
@@ -47,24 +201,23 @@ describe("httpbin worker", async () => {
       expect(response.status).toBe(400);
     }
   });
+});
 
-  it("response-headers", async () => {
-    const response = await fetch(`${ROOT}/response-headers?a=1&b=2`);
-    expect(response.headers.get("a")).toBe("1");
-    expect(response.headers.get("b")).toBe("2");
-    expect(await response.json()).toMatchObject({ a: "1", b: "2" });
+describe("image", () => {
+  it("normal", async () => {
+    for (const format of ["png", "jpeg", "webp", "svg"]) {
+      const response = await fetch(`${ROOT}/image/${format}`);
+      expect(response.status).toBe(200);
+      expect(response.headers.get("Content-Type")).toMatch(
+        new RegExp(`image/${format}`),
+      );
+      const arrayBuffer = await response.arrayBuffer();
+      expect(arrayBuffer.byteLength).toBeGreaterThan(0);
+    }
   });
+});
 
-  it("ip ", async () => {
-    const response = await fetch(`${ROOT}/ip`);
-    expect(response.status).toBe(200);
-  });
-
-  it("status", async () => {
-    const response = await fetch(`${ROOT}/status/208`);
-    expect(response.status).toBe(208);
-  });
-
+describe("anything", () => {
   it("anything json", async () => {
     const req = new Request(`${ROOT}/anything/123`, {
       method: "PUT",
