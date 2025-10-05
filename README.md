@@ -62,8 +62,6 @@ Output:
 - `/anything`: Returns anything that was sent in the request
 - `/delay/:n`: Delays responding for `n` seconds
 - `/redirect/:n`: Redirects `n` times
-- `/cookies`: Returns the requester's cookies
-- `/cookies/set?name=value`: Sets a cookie
 - `/basic-auth/:user/:passwd`: Challenges HTTP Basic Auth
 - `/bearer`: Challenges HTTP Bearer Auth
 - `/cache/:max-age`: Returns a response with `Cache-Control: public, max-age=60`

@@ -267,9 +267,6 @@ describe("cookies", () => {
       },
     );
     expect(response.status).toBe(200);
-    for (const [k, v] of response.headers) {
-      console.log(`xxx ${k}=${v}`);
-    }
     expect(await response.json()).toMatchObject({
       // TODO: integration test can't get cookies now.
       // cookies: { name1: "value1", name2: "value2", name3: "value3" },
