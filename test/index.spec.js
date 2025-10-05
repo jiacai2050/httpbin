@@ -70,7 +70,7 @@ describe("Bearer auth", () => {
 });
 
 describe("Status code", () => {
-  it("normal ", async () => {
+  it("normal", async () => {
     // [200, 599]
     for (const code of [200, 300, 400, 500]) {
       const response = await fetch(`${ROOT}/status/${code}`);
