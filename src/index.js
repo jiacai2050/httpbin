@@ -1,27 +1,35 @@
 import { CustomError, arrayBufferToBase64, stringToNumber } from "./utils.js";
 
+function addCorsHeaders(resp, origin) {
+  // Ensure CORS headers are set on all responses
+  if (origin) {
+    resp.headers.set("Access-Control-Allow-Origin", origin);
+    resp.headers.set("Access-Control-Allow-Credentials", "true");
+  } else {
+    resp.headers.set("Access-Control-Allow-Origin", "*");
+  }
+  resp.headers.set(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+  );
+  resp.headers.set(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization",
+  );
+  return resp;
+}
+
 export default {
   async fetch(req, env, ctx) {
     try {
-      const resp = await handle(req, env, ctx);
-      const newResp = new Response(resp.body, resp);
-      // Ensure CORS headers are set on all responses
-      const origin = newResp.headers.get("Origin");
-      if (origin) {
-        newResp.headers.set("Access-Control-Allow-Origin", origin);
-        newResp.headers.set("Access-Control-Allow-Credentials", "true");
-      } else {
-        newResp.headers.set("Access-Control-Allow-Origin", "*");
+      const origin = req.headers.get("Origin");
+      if (req.method === "OPTIONS") {
+        const response = new Response(null, { status: 204 });
+        return addCorsHeaders(response, origin);
       }
-      newResp.headers.set(
-        "Access-Control-Allow-Methods",
-        "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-      );
-      newResp.headers.set(
-        "Access-Control-Allow-Headers",
-        "Content-Type, Authorization",
-      );
-      return newResp;
+
+      const resp = await handle(req, env, ctx);
+      return addCorsHeaders(new Response(resp.body, resp), origin);
     } catch (err) {
       if (err instanceof CustomError) {
         return Response.json(
