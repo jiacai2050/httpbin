@@ -126,8 +126,6 @@
     <li><code>/delay/:n</code>: Delays responding for <code>n</code>
     seconds</li>
     <li><code>/redirect/:n</code>: Redirects <code>n</code> times</li>
-    <li><code>/cookies</code>: Returns the requester’s cookies</li>
-    <li><code>/cookies/set?name=value</code>: Sets a cookie</li>
     <li><code>/basic-auth/:user/:passwd</code>: Challenges HTTP Basic
     Auth</li>
     <li><code>/bearer</code>: Challenges HTTP Bearer Auth</li>
@@ -140,9 +138,15 @@
     <li><code>/html</code>: Returns a sample HTML document</li>
     <li><code>/json</code>: Returns a sample JSON document</li>
     <li><code>/gzip</code>: Returns a gzip-encoded response</li>
+    <li><code>/brotli</code>: Returns a brotli-encoded response</li>
     <li><code>/deflate</code>: Returns a deflate-encoded response</li>
     <li><code>/anything/:anything</code>: Returns anything that was sent
     in the request</li>
+    <li><code>/cookies</code>: Returns the requester’s cookies</li>
+    <li><code>/cookies/set?name=value</code>: Sets cookies and redirects
+    to <code>/cookies</code></li>
+    <li><code>/cookies/delete?name=value</code>: Deletes cookies and
+    redirects to <code>/cookies</code></li>
     <li><code>/image/:type</code>: Returns a random image of the given
     type (png, jpeg, webp, svg)</li>
     </ul>
