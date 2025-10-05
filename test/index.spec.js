@@ -9,7 +9,7 @@ import worker from "../src";
 
 // https://developers.cloudflare.com/workers/testing/vitest-integration/write-your-first-test/
 const ROOT = "https://httpbin.liujiacai.net";
-describe("http methonds", () => {
+describe("http methods", () => {
   it("200", async () => {
     for (const method of ["get", "post", "put", "patch", "delete"]) {
       const request = new Request(`${ROOT}/${method}`, { method: method });
