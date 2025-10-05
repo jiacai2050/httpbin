@@ -1,9 +1,35 @@
 import { CustomError, arrayBufferToBase64, stringToNumber } from "./utils.js";
 
+function addCorsHeaders(resp, origin) {
+  // Ensure CORS headers are set on all responses
+  if (origin) {
+    resp.headers.set("Access-Control-Allow-Origin", origin);
+    resp.headers.set("Access-Control-Allow-Credentials", "true");
+  } else {
+    resp.headers.set("Access-Control-Allow-Origin", "*");
+  }
+  resp.headers.set(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+  );
+  resp.headers.set(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization",
+  );
+  return resp;
+}
+
 export default {
   async fetch(req, env, ctx) {
     try {
-      return await handle(req, env, ctx);
+      const origin = req.headers.get("Origin");
+      if (req.method === "OPTIONS") {
+        const response = new Response(null, { status: 204 });
+        return addCorsHeaders(response, origin);
+      }
+
+      const resp = await handle(req, env, ctx);
+      return addCorsHeaders(new Response(resp.body, resp), origin);
     } catch (err) {
       if (err instanceof CustomError) {
         return Response.json(
