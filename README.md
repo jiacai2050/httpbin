@@ -59,6 +59,22 @@ All endpoints accept any HTTP method. Additionally, it includes features not fou
   wscat -c wss://edgebin.liujiacai.net/ws
   ```
 
+- QR Code Generation:
+
+  Generate QR codes for any text or URL. For example, to generate a QR code for "Hello, World!":
+
+  ```bash
+  curl "https://edgebin.liujiacai.net/qr?text=Hello World!" --output qr.svg
+  ```
+
+- Markdown Rendering:
+
+  Render Markdown content to HTML. For example:
+
+  ```bash
+  curl -X POST "https://edgebin.liujiacai.net/markdown" -H "Content-Type: text/markdown" --data "# Hello, World!"
+  ```
+
 ### Frequently Used Endpoints
 
 - `/get`: Returns GET data
