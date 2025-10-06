@@ -1,12 +1,12 @@
-## [httpbin-worker](https://github.com/jiacai2050/httpbin)
+## [EdgeBin](https://github.com/jiacai2050/edgebin)
 
 <p align="center">
-  <a href="https://httpbin.liujiacai.net/"><img src="docs/logo.svg" width="30%" /></a>
+  <a href="https://edgebin.liujiacai.net/"><img src="docs/logo.svg" width="30%" /></a>
 </p>
 
-A is a simple HTTP request and response service, providing a useful tool for testing HTTP libraries.
+edgebin is a simple, high-performance HTTP utility designed to test your networking stack, with a focus on edge deployment.
 
-Inspired by the original [httpbin.org](https://httpbin.org) and powered by Cloudflare Workers.
+Inspired by the pioneering [httpbin.org](https://httpbin.org), it leverages the power of edge computing (Cloudflare Workers) to deliver fast, reliable testing capabilities tailored for modern distributed networks.
 
 ## Features
 
@@ -28,7 +28,7 @@ All endpoints accept any HTTP method. Additionally, it includes features not fou
 - IP Geolocation:
 
   ```bash
-  curl https://httpbin.liujiacai.net/ip
+  curl https://edgebin.liujiacai.net/ip
   ```
 
   Output:
@@ -56,7 +56,7 @@ All endpoints accept any HTTP method. Additionally, it includes features not fou
   This endpoint echoes back any message sent to it over a WebSocket connection. You can test it using [wscat](https://github.com/websockets/wscat):
 
   ```bash
-  wscat -c wss://httpbin.liujiacai.net/ws
+  wscat -c wss://edgebin.liujiacai.net/ws
   ```
 
 ### Frequently Used Endpoints
@@ -92,27 +92,27 @@ All endpoints accept any HTTP method. Additionally, it includes features not fou
 - `/cookies/delete?name=value`: Deletes cookies and redirects to `/cookies`
 - `/image/:type`: Returns a random image of the given type (png, jpeg, webp, svg)
 
-If you find an endpoint is missing or notice any unexpected behavior, we welcome you to [open an issue](https://github.com/jiacai2050/httpbin/issues) or [submit a pull request](https://github.com/jiacai2050/httpbin/pulls).
+If you find an endpoint is missing or notice any unexpected behavior, we welcome you to [open an issue](https://github.com/jiacai2050/edgebin/issues) or [submit a pull request](https://github.com/jiacai2050/edgebin/pulls).
 
 ## Deploy
 
 Feel free to deploy your own instance of httpbin. The free tier of Cloudflare Workers is sufficient for most use cases.
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/jiacai2050/httpbin)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/jiacai2050/edgebin)
 
-If you'd like to share your public instance, please [let us know](https://github.com/jiacai2050/httpbin/discussions/4) and we'll add it to the list.
+If you'd like to share your public instance, please [let us know](https://github.com/jiacai2050/edgebin/discussions/4) and we'll add it to the list.
 
 ### Public Instances
 
 | Instance                        | Maintainer                                   |
 | ------------------------------- | -------------------------------------------- |
-| <https://httpbin.liujiacai.net> | [@jiacai2050](https://github.com/jiacai2050) |
+| <https://edgebin.liujiacai.net> | [@jiacai2050](https://github.com/jiacai2050) |
 
 ## Development
 
 ```bash
 # clone the repo and install dependencies
-git clone https://github.com/jiacai2050/httpbin.git && cd httpbin
+git clone https://github.com/jiacai2050/edgebin.git && cd edgebin
 npm install
 
 # start development server, listen on http://localhost:8787
@@ -123,6 +123,8 @@ npm run dev
 # https://developers.cloudflare.com/workers/get-started/guide/
 npm run deploy
 ```
+
+In the future, we may support other edge platforms like Vercel Edge Functions and Deno Deploy.
 
 ## License
 
