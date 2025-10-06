@@ -19,4 +19,9 @@
     "binding": "ASSETS",
     "run_worker_first": true,
   },
+  "build": {
+    "command": "make setup docs",
+    "cwd": "./",
+    "watch_dir": "./src",
+  },
 }

@@ -1,10 +1,10 @@
-## [edgebin](https://github.com/jiacai2050/edgebin)
+## [EdgeBin](https://github.com/jiacai2050/edgebin)
 
 <p align="center">
   <a href="https://edgebin.liujiacai.net/"><img src="docs/logo.svg" width="30%" /></a>
 </p>
 
-Edgebin is a simple, high-performance HTTP utility designed to test your networking stack, with a focus on Edge deployment.
+edgebin is a simple, high-performance HTTP utility designed to test your networking stack, with a focus on Edge deployment.
 
 Inspired by the pioneering [httpbin.org](https://httpbin.org), it leverages the power of edge computing (Cloudflare Workers) to deliver fast, reliable testing capabilities tailored for modern distributed networks.
 
@@ -112,7 +112,7 @@ If you'd like to share your public instance, please [let us know](https://github
 
 ```bash
 # clone the repo and install dependencies
-git clone https://github.com/jiacai2050/httpbin.git && cd httpbin
+git clone https://github.com/jiacai2050/edgebin.git && cd edgebin
 npm install
 
 # start development server, listen on http://localhost:8787
@@ -123,6 +123,8 @@ npm run dev
 # https://developers.cloudflare.com/workers/get-started/guide/
 npm run deploy
 ```
+
+In the future, we may support other edge platforms like Vercel Edge Functions and Deno Deploy.
 
 ## License
 
