@@ -134,8 +134,8 @@ async function handle(req, env, ctx) {
 
     // Response formats: Testing different response formats
     case "encoding": {
-      const chatset = parts[1];
-      switch (chatset) {
+      const charset = parts[1];
+      switch (charset) {
         case "utf8":
           return env.ASSETS.fetch(req);
         case "gb2312":
