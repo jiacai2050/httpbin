@@ -26,7 +26,7 @@ function handleSession(server, timeZone) {
 export const websocketHandler = async (request) => {
   const upgradeHeader = request.headers.get("Upgrade");
   const cf = request.cf || {};
-  const timezone = cf.timezone || "Asia/Shanghai";
+  const timezone = cf.timezone;
   if (upgradeHeader !== "websocket") {
     throw new CustomError("Expected websocket", 400);
   }
