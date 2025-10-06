@@ -1,53 +1,54 @@
 <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
   <!-- Background Circle -->
   <circle cx="200" cy="200" r="180" fill="#FF6B35" opacity="0.1"/>
-  
+
   <!-- Main Circle -->
   <circle cx="200" cy="200" r="160" fill="none" stroke="#FF6B35" stroke-width="8"/>
-  
+
   <!-- HTTP Arrow (Request) -->
   <g id="request-arrow">
     <line x1="80" y1="150" x2="170" y2="150" stroke="#004E89" stroke-width="6" stroke-linecap="round"/>
     <polyline points="155,140 170,150 155,160" fill="none" stroke="#004E89" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
   </g>
-  
+
   <!-- Binary Box (Server) -->
   <rect x="180" y="120" width="40" height="60" rx="4" fill="#004E89"/>
   <text x="200" y="145" font-family="monospace" font-size="18" fill="#fff" text-anchor="middle" font-weight="bold">01</text>
   <text x="200" y="165" font-family="monospace" font-size="18" fill="#fff" text-anchor="middle" font-weight="bold">10</text>
-  
+
   <!-- HTTP Arrow (Response) -->
   <g id="response-arrow">
     <line x1="230" y1="150" x2="320" y2="150" stroke="#F77F00" stroke-width="6" stroke-linecap="round"/>
     <polyline points="305,140 320,150 305,160" fill="none" stroke="#F77F00" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>
   </g>
-  
+
   <!-- HTTP Methods -->
   <g id="http-methods">
     <text x="90" y="135" font-family="'Courier New', monospace" font-size="13" fill="#004E89" font-weight="bold">GET</text>
     <text x="280" y="135" font-family="'Courier New', monospace" font-size="13" fill="#F77F00" font-weight="bold">200</text>
   </g>
-  
+
   <!-- Decorative Code Lines -->
   <g opacity="0.3">
     <line x1="120" y1="220" x2="180" y2="220" stroke="#004E89" stroke-width="2"/>
     <line x1="120" y1="235" x2="160" y2="235" stroke="#004E89" stroke-width="2"/>
     <line x1="120" y1="250" x2="170" y2="250" stroke="#004E89" stroke-width="2"/>
-    
+
     <line x1="220" y1="220" x2="280" y2="220" stroke="#F77F00" stroke-width="2"/>
     <line x1="240" y1="235" x2="280" y2="235" stroke="#F77F00" stroke-width="2"/>
     <line x1="230" y1="250" x2="280" y2="250" stroke="#F77F00" stroke-width="2"/>
   </g>
-  
+
   <!-- Text: httpbin -->
-  <text x="200" y="295" font-family="'SF Mono', 'Monaco', 'Courier New', monospace" font-size="42" fill="#1A1A1A" text-anchor="middle" font-weight="700">httpbin</text>
-  
+  <text x="200" y="295" font-family="'SF Mono', 'Monaco', 'Courier New', monospace" font-size="42" fill="#1A1A1A" text-anchor="middle" font-weight="700">edgebin</text>
+
   <!-- Subtitle -->
   <text x="200" y="320" font-family="'Inter', 'Helvetica', sans-serif" font-size="14" fill="#666" text-anchor="middle" letter-spacing="1">HTTP Testing Service</text>
-  
+
   <!-- Cloudflare Workers Badge -->
   <g transform="translate(140, 335)">
     <rect x="0" y="0" width="120" height="22" rx="11" fill="#F6821F" opacity="0.15"/>
-    <text x="60" y="15" font-family="'Inter', sans-serif" font-size="11" fill="#F6821F" text-anchor="middle" font-weight="600">Cloudflare Workers</text>
+    <text x="60" y="15" font-family="'Inter', sans-serif" font-size="11" fill="#F6821F" text-anchor="middle" font-weight="600">on the edge</text>
+
   </g>
 </svg>

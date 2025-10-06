@@ -1,12 +1,12 @@
-## [httpbin-worker](https://github.com/jiacai2050/httpbin)
+## [edgebin](https://github.com/jiacai2050/edgebin)
 
 <p align="center">
-  <a href="https://httpbin.liujiacai.net/"><img src="docs/logo.svg" width="30%" /></a>
+  <a href="https://edgebin.liujiacai.net/"><img src="docs/logo.svg" width="30%" /></a>
 </p>
 
-A is a simple HTTP request and response service, providing a useful tool for testing HTTP libraries.
+Edgebin is a simple, high-performance HTTP utility designed to test your networking stack, with a focus on Edge deployment.
 
-Inspired by the original [httpbin.org](https://httpbin.org) and powered by Cloudflare Workers.
+Inspired by the pioneering [httpbin.org](https://httpbin.org), it leverages the power of edge computing (Cloudflare Workers) to deliver fast, reliable testing capabilities tailored for modern distributed networks.
 
 ## Features
 
@@ -28,7 +28,7 @@ All endpoints accept any HTTP method. Additionally, it includes features not fou
 - IP Geolocation:
 
   ```bash
-  curl https://httpbin.liujiacai.net/ip
+  curl https://edgebin.liujiacai.net/ip
   ```
 
   Output:
@@ -56,7 +56,7 @@ All endpoints accept any HTTP method. Additionally, it includes features not fou
   This endpoint echoes back any message sent to it over a WebSocket connection. You can test it using [wscat](https://github.com/websockets/wscat):
 
   ```bash
-  wscat -c wss://httpbin.liujiacai.net/ws
+  wscat -c wss://edgebin.liujiacai.net/ws
   ```
 
 ### Frequently Used Endpoints
@@ -106,7 +106,7 @@ If you'd like to share your public instance, please [let us know](https://github
 
 | Instance                        | Maintainer                                   |
 | ------------------------------- | -------------------------------------------- |
-| <https://httpbin.liujiacai.net> | [@jiacai2050](https://github.com/jiacai2050) |
+| <https://edgebin.liujiacai.net> | [@jiacai2050](https://github.com/jiacai2050) |
 
 ## Development
 

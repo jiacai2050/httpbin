@@ -8,7 +8,7 @@ import { describe, it, expect } from "vitest";
 import worker from "../src";
 
 // https://developers.cloudflare.com/workers/testing/vitest-integration/write-your-first-test/
-const ROOT = "https://httpbin.liujiacai.net";
+const ROOT = "https://edgebin.liujiacai.net";
 describe("http methods", () => {
   it("200", async () => {
     for (const method of ["get", "post", "put", "patch", "delete"]) {
