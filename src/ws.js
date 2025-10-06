@@ -1,4 +1,4 @@
-import { CustomError, getDateString } from "./utils";
+import { CustomError, getDateString } from "./utils.js";
 
 async function handleSession(server, timeZone) {
   server.accept();
