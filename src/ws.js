@@ -2,7 +2,7 @@ import { CustomError, getDateString } from "./utils.js";
 
 function handleSession(server, timeZone) {
   server.accept();
-  server.addEventListener("message", async ({ data }) => {
+  server.addEventListener("message", ({ data }) => {
     switch (data) {
       case "close":
         return server.close(1000, "Normal Closure");
