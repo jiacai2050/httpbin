@@ -174,6 +174,12 @@ describe("Dynamic data", () => {
     const json = await response.json();
     expect(json["gzipped"]).toBe(true);
   });
+
+  it("markdown", async () => {
+    const response = await fetch(`${ROOT}/markdown?text=Nice to see you!`);
+    expect(response.status).toBe(200);
+    expect(await response.text()).toStrictEqual("<p>Nice to see you!</p>\n");
+  });
 });
 
 describe("redirect", () => {
