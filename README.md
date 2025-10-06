@@ -1,12 +1,12 @@
-## [EdgeBin](https://github.com/jiacai2050/edgebin)
+## [Edgebin](https://github.com/jiacai2050/edgebin)
 
 <p align="center">
   <a href="https://edgebin.liujiacai.net/"><img src="docs/logo.svg" width="30%" /></a>
 </p>
 
-edgebin is a simple, high-performance HTTP utility designed to test your networking stack, with a focus on edge deployment.
+Edgebin is a minimalist HTTP service designed to test your networking stack, with a focus on edge deployment.
 
-Inspired by the pioneering [httpbin.org](https://httpbin.org), it leverages the power of edge computing (Cloudflare Workers) to deliver fast, reliable testing capabilities tailored for modern distributed networks.
+Inspired by the [httpbin.org](https://httpbin.org), it leverages the power of edge computing (Cloudflare Workers) to deliver fast, reliable testing capabilities tailored for modern distributed networks.
 
 ## Features
 

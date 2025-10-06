@@ -1,3 +1,5 @@
+import { handleQRCode } from "./qrcode.js";
+import { handleMarkdown } from "./markdown.js";
 import {
   CustomError,
   arrayBufferToBase64,
@@ -235,6 +237,12 @@ async function handle(req, env, ctx) {
         }),
       });
     }
+    case "qrcode":
+      return await handleQRCode(Object.fromEntries(searchParams));
+
+    case "markdown":
+      return await handleMarkdown(req, searchParams);
+
     // Cookies: Returns the cookies sent in the request
     case "cookies":
       return handleCookies(parts, searchParams, req);
