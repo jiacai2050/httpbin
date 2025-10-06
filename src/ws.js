@@ -32,7 +32,7 @@ export const websocketHandler = async (request) => {
   }
 
   const [client, server] = Object.values(new WebSocketPair());
-  await handleSession(server, timezone);
+  handleSession(server, timezone);
 
   return new Response(null, {
     status: 101,
