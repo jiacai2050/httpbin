@@ -15,7 +15,6 @@ export async function handleQRCode(userOptions) {
     case "utf8":
     case "svg": {
       const svg = await QRCode.toString(text, options);
-      console.log(svg);
       return new Response(svg, {
         headers: {
           "Content-Type": "image/svg+xml",
