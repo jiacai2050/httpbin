@@ -15,10 +15,10 @@ function handleSession(server, timeZone) {
     }
   });
 
-  server.addEventListener("close", async (evt) => {
+  server.addEventListener("close", (evt) => {
     console.log(evt);
   });
-  server.addEventListener("error", async (evt) => {
+  server.addEventListener("error", (evt) => {
     console.log(evt);
   });
 }
