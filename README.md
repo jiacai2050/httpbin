@@ -75,14 +75,11 @@ All endpoints accept any HTTP method. Additionally, it includes features not fou
 - `/cache/:max-age`: Returns a response with `Cache-Control: public, max-age=60`
 - `/response-headers?key=value`: Returns a response with the given headers
 - `/bytes/:n`: Returns `n` random bytes
-- `/date`: Returns current date and time.  
-  Supports the following query parameters to control output:  
-  - `format`: Output format. One of `iso`, `locale`, `ts`, `timestamp`, `utc`. Default is `iso`.  
-  - `locale`: [BCP47 locale](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) string, e.g., `en-US`, `zh-CN`. Used when `format=locale`.  
-  - `timeZone`: [IANA time zone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), e.g., `Asia/Shanghai`.  
-  Example:  
-  ```bash
-  curl "https://httpbin.liujiacai.net/date?format=locale&locale=en-GB&timeZone=Asia/Shanghai"
+- `/date`: Returns current date and time.
+  Supports the following query parameters to control output:
+  - `format`: Output format. One of `iso`, `locale`, `ts`, `timestamp`, `utc`. Default is `iso`.
+  - `locale`: [BCP47 locale](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) string, e.g., `en-US`, `zh-CN`. Used when `format=locale`.
+  - `timeZone`: [IANA time zone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), e.g., `Asia/Shanghai`.
 - `/xml`: Returns a sample XML document
 - `/html`: Returns a sample HTML document
 - `/json`: Returns a sample JSON document

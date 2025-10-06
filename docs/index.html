@@ -95,7 +95,20 @@
     <li><code>/response-headers?key=value</code>: Returns a response
     with the given headers</li>
     <li><code>/bytes/:n</code>: Returns <code>n</code> random bytes</li>
-    <li><code>/date</code>: Returns current date and time</li>
+    <li><code>/date</code>: Returns current date and time. Supports the
+    following query parameters to control output:
+    <ul>
+    <li><code>format</code>: Output format. One of <code>iso</code>,
+    <code>locale</code>, <code>ts</code>, <code>timestamp</code>,
+    <code>utc</code>. Default is <code>iso</code>.</li>
+    <li><code>locale</code>: <a
+    href="https://www.rfc-editor.org/rfc/bcp/bcp47.txt">BCP47 locale</a>
+    string, e.g., <code>en-US</code>, <code>zh-CN</code>. Used when
+    <code>format=locale</code>.</li>
+    <li><code>timeZone</code>: <a
+    href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">IANA
+    time zone</a>, e.g., <code>Asia/Shanghai</code>.</li>
+    </ul></li>
     <li><code>/xml</code>: Returns a sample XML document</li>
     <li><code>/html</code>: Returns a sample HTML document</li>
     <li><code>/json</code>: Returns a sample JSON document</li>

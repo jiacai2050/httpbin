@@ -16,6 +16,10 @@ export default {
       }
 
       const resp = await handle(req, env, ctx);
+      // console.log(`[${req.method}] ${req.url} -> ${resp.status}`);
+      if (resp.status === 101) {
+        return resp;
+      }
       return addCorsHeaders(new Response(resp.body, resp), origin);
     } catch (err) {
       if (err instanceof CustomError) {
