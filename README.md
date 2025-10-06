@@ -64,7 +64,7 @@ All endpoints accept any HTTP method. Additionally, it includes features not fou
   Generate QR codes for any text or URL. For example, to generate a QR code for "Hello, World!":
 
   ```bash
-  curl "https://edgebin.liujiacai.net/qr?text=Hello World!" --output qr.svg
+  curl "https://edgebin.liujiacai.net/qrcode?text=Hello World!" --output qr.svg
   ```
 
 - Markdown Rendering:
