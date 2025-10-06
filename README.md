@@ -1,16 +1,16 @@
-## [httpbin](https://github.com/jiacai2050/httpbin)
+## [httpbin-worker](https://github.com/jiacai2050/httpbin)
 
 <p align="center">
-  <img src="docs/logo.svg" width="30%" />
+  <a href="https://httpbin.liujiacai.net/"><img src="docs/logo.svg" width="30%" /></a>
 </p>
 
-A simple HTTP Request & Response Service, which is a great tool for testing HTTP libraries.
+A is a simple HTTP request and response service, providing a useful tool for testing HTTP libraries.
 
-Inspired by [httpbin](https://httpbin.org), but built with Cloudflare Workers.
+Inspired by the original [httpbin.org](https://httpbin.org) and powered by Cloudflare Workers.
 
 ## Features
 
-Support most of the endpoints in [httpbin](https://httpbin.org), including:
+Supports most of the endpoints from the original [httpbin.org](https://httpbin.org), including:
 
 - HTTP methods
 - Authentication
@@ -23,9 +23,9 @@ Support most of the endpoints in [httpbin](https://httpbin.org), including:
 - Cache
 - Anything
 
-For all endpoints, we don't check the request method, so you can use any HTTP method to access any endpoint.
+All endpoints accept any HTTP method.
 
-Besides, we have additional features not existing in the original httpbin, such as IP Geolocation:
+Additionally, it includes features not found in the original httpbin, such as IP Geolocation:
 
 ```bash
 curl https://httpbin.liujiacai.net/ip
@@ -54,7 +54,7 @@ Output:
 ### Frequently Used Endpoints
 
 - `/get`: Returns GET data
-- `/ip`: Reurns the requester's IP address
+- `/ip`: Returns the requester's IP address
 - `/ipgeo`: Returns the requester's IP address and geolocation information
 - `/user-agent`: Returns the requester's User-Agent
 - `/headers`: Returns the requester's HTTP headers
@@ -79,22 +79,21 @@ Output:
 - `/cookies/delete?name=value`: Deletes cookies and redirects to `/cookies`
 - `/image/:type`: Returns a random image of the given type (png, jpeg, webp, svg)
 
-If you notice any endpoint missing or unexpected behavior, please [open an issue](https://github.com/jiacai2050/httpbin/issues) or [submit a pull request](https://github.com/jiacai2050/httpbin/pulls).
+If you find an endpoint is missing or notice any unexpected behavior, we welcome you to [open an issue](https://github.com/jiacai2050/httpbin/issues) or [submit a pull request](https://github.com/jiacai2050/httpbin/pulls).
 
 ## Deploy
 
-Anyone is welcome to deploy their own instance of httpbin. The free tier of Cloudflare Workers is sufficient for most use cases.
+Feel free to deploy your own instance of httpbin. The free tier of Cloudflare Workers is sufficient for most use cases.
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/jiacai2050/httpbin)
 
-If you want to share your instance with others, please [let me know](https://github.com/jiacai2050/httpbin/discussions/4), I will add your instance to the list of public instances.
+If you'd like to share your public instance, please [let us know](https://github.com/jiacai2050/httpbin/discussions/4) and we'll add it to the list.
 
 ### Public Instances
 
-| Instance                      | Maintainer                                   |
-| ----------------------------- | -------------------------------------------- |
-| https://httpbin.liujiacai.net | [@jiacai2050](https://github.com/jiacai2050) |
-
+| Instance                        | Maintainer                                   |
+| ------------------------------- | -------------------------------------------- |
+| <https://httpbin.liujiacai.net> | [@jiacai2050](https://github.com/jiacai2050) |
 
 ## Development
 

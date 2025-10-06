@@ -12,69 +12,23 @@
         content="httpbin,http request,response service,api,restful,cloudflare workers"
     />
     <link rel="icon" href="https://liujiacai.net/favicon.ico" />
-    <style>
-        body {
-            font-family: Georgia, serif;
-            line-height: 1.6;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1,
-        h2 {
-            color: #333;
-            border-bottom: 2px solid #ccc;
-            padding-bottom: 5px;
-        }
-        img {
-            margin: auto;
-            display: block;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-        th,
-        td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #666;
-        }
-        code {
-            background-color: #f4f4f4;
-            padding: 2px 4px;
-            border-radius: 4px;
-            font-family: Consolas, monospace;
-        }
-        pre {
-            background-color: #f4f4f4;
-            padding: 10px;
-            border-radius: 4px;
-            overflow-x: auto;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-    <h2 id="httpbin"><a
-    href="https://github.com/jiacai2050/httpbin">httpbin</a></h2>
+    <h2 id="httpbin-worker"><a
+    href="https://github.com/jiacai2050/httpbin">httpbin-worker</a></h2>
     <p align="center">
-    <img src="logo.svg" width="30%" />
+    <a href="https://httpbin.liujiacai.net/"><img src="logo.svg" width="30%" /></a>
     </p>
-    <p>A simple HTTP Request &amp; Response Service, which is a great
-    tool for testing HTTP libraries.</p>
-    <p>Inspired by <a href="https://httpbin.org">httpbin</a>, but built
-    with Cloudflare Workers.</p>
+    <p>A is a simple HTTP request and response service, providing a
+    useful tool for testing HTTP libraries.</p>
+    <p>Inspired by the original <a
+    href="https://httpbin.org">httpbin.org</a> and powered by Cloudflare
+    Workers.</p>
     <h2 id="features">Features</h2>
-    <p>Support most of the endpoints in <a
-    href="https://httpbin.org">httpbin</a>, including:</p>
+    <p>Supports most of the endpoints from the original <a
+    href="https://httpbin.org">httpbin.org</a>, including:</p>
     <ul>
     <li>HTTP methods</li>
     <li>Authentication</li>
@@ -87,9 +41,8 @@
     <li>Cache</li>
     <li>Anything</li>
     </ul>
-    <p>For all endpoints, we don’t check the request method, so you can
-    use any HTTP method to access any endpoint.</p>
-    <p>Besides, we have additional features not existing in the original
+    <p>All endpoints accept any HTTP method.</p>
+    <p>Additionally, it includes features not found in the original
     httpbin, such as IP Geolocation:</p>
     <div class="sourceCode" id="cb1"><pre
     class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> https://httpbin.liujiacai.net/ip</span></code></pre></div>
@@ -113,7 +66,7 @@
     <h3 id="frequently-used-endpoints">Frequently Used Endpoints</h3>
     <ul>
     <li><code>/get</code>: Returns GET data</li>
-    <li><code>/ip</code>: Reurns the requester’s IP address</li>
+    <li><code>/ip</code>: Returns the requester’s IP address</li>
     <li><code>/ipgeo</code>: Returns the requester’s IP address and
     geolocation information</li>
     <li><code>/user-agent</code>: Returns the requester’s
@@ -150,28 +103,27 @@
     <li><code>/image/:type</code>: Returns a random image of the given
     type (png, jpeg, webp, svg)</li>
     </ul>
-    <p>If you notice any endpoint missing or unexpected behavior, please
-    <a href="https://github.com/jiacai2050/httpbin/issues">open an
+    <p>If you find an endpoint is missing or notice any unexpected
+    behavior, we welcome you to <a
+    href="https://github.com/jiacai2050/httpbin/issues">open an
     issue</a> or <a
     href="https://github.com/jiacai2050/httpbin/pulls">submit a pull
     request</a>.</p>
     <h2 id="deploy">Deploy</h2>
-    <p>Anyone is welcome to deploy their own instance of httpbin. The
-    free tier of Cloudflare Workers is sufficient for most use
-    cases.</p>
+    <p>Feel free to deploy your own instance of httpbin. The free tier
+    of Cloudflare Workers is sufficient for most use cases.</p>
     <p><a
     href="https://deploy.workers.cloudflare.com/?url=https://github.com/jiacai2050/httpbin"><img
     src="https://deploy.workers.cloudflare.com/button"
     alt="Deploy to Cloudflare" /></a></p>
-    <p>If you want to share your instance with others, please <a
-    href="https://github.com/jiacai2050/httpbin/discussions/4">let me
-    know</a>, I will add your instance to the list of public
-    instances.</p>
+    <p>If you’d like to share your public instance, please <a
+    href="https://github.com/jiacai2050/httpbin/discussions/4">let us
+    know</a> and we’ll add it to the list.</p>
     <h3 id="public-instances">Public Instances</h3>
     <table>
     <colgroup>
-    <col style="width: 39%" />
-    <col style="width: 60%" />
+    <col style="width: 41%" />
+    <col style="width: 58%" />
     </colgroup>
     <thead>
     <tr>
@@ -181,7 +133,8 @@
     </thead>
     <tbody>
     <tr>
-    <td>https://httpbin.liujiacai.net</td>
+    <td><a href="https://httpbin.liujiacai.net"
+    class="uri">https://httpbin.liujiacai.net</a></td>
     <td><a href="https://github.com/jiacai2050"><span class="citation"
     data-cites="jiacai2050">@jiacai2050</span></a></td>
     </tr>

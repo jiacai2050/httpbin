@@ -52,10 +52,7 @@ export default {
 
 async function handle(req, env, ctx) {
   const { pathname, searchParams } = new URL(req.url);
-  const parts = pathname.split("/");
-  if (parts.length > 0 && parts[0] === "") {
-    parts.shift();
-  }
+  const parts = pathname.slice(1).split("/");
   // Index page, return static HTML from assets
   if (parts.length == 0 || parts[0] === "") {
     return env.ASSETS.fetch(req);
@@ -105,23 +102,23 @@ async function handle(req, env, ctx) {
 
     // Response inspection: Inspecting the response data
     case "response-headers": {
-      const bodyHeaders = {};
+      const body = {};
       for (const [key, value] of [...req.headers, ...searchParams]) {
-        if (bodyHeaders.hasOwnProperty(key)) {
-          if (Array.isArray(bodyHeaders[key])) {
-            bodyHeaders[key].push(value);
-          } else {
-            bodyHeaders[key] = [bodyHeaders[key], value];
+        if (body.hasOwnProperty(key)) {
+          // If the key already exists, we need to create or append to an array.
+          if (!Array.isArray(body[key])) {
+            body[key] = [body[key]]; // Convert the existing value to an array
           }
+          body[key].push(value);
         } else {
-          bodyHeaders[key] = value;
+          // If the key doesn't exist, just set the value.
+          body[key] = value;
         }
       }
-      const headers = new Headers();
-      for (const [key, value] of searchParams) {
-        headers.append(key, value);
-      }
-      return Response.json(bodyHeaders, { headers });
+
+      // Response headers are built from query params (this part is a clear improvement)
+      const headers = new Headers(searchParams);
+      return Response.json(body, { headers });
     }
     case "cache":
       return handleCache(parts, searchParams, req);
