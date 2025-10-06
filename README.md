@@ -1,12 +1,12 @@
-## [EdgeBin](https://github.com/jiacai2050/edgebin)
+## [Edgebin](https://github.com/jiacai2050/edgebin)
 
 <p align="center">
   <a href="https://edgebin.liujiacai.net/"><img src="docs/logo.svg" width="30%" /></a>
 </p>
 
-edgebin is a simple, high-performance HTTP utility designed to test your networking stack, with a focus on edge deployment.
+Edgebin is a minimalist HTTP service designed to test your networking stack, with a focus on edge deployment.
 
-Inspired by the pioneering [httpbin.org](https://httpbin.org), it leverages the power of edge computing (Cloudflare Workers) to deliver fast, reliable testing capabilities tailored for modern distributed networks.
+Inspired by the [httpbin.org](https://httpbin.org), it leverages the power of edge computing (Cloudflare Workers) to deliver fast, reliable testing capabilities tailored for modern distributed networks.
 
 ## Features
 
@@ -57,6 +57,22 @@ All endpoints accept any HTTP method. Additionally, it includes features not fou
 
   ```bash
   wscat -c wss://edgebin.liujiacai.net/ws
+  ```
+
+- QR Code Generation:
+
+  Generate QR codes for any text or URL. For example, to generate a QR code for "Hello, World!":
+
+  ```bash
+  curl "https://edgebin.liujiacai.net/qrcode?text=Hello World!" --output qr.svg
+  ```
+
+- Markdown Rendering:
+
+  Render Markdown content to HTML. For example:
+
+  ```bash
+  curl -X POST "https://edgebin.liujiacai.net/markdown" -H "Content-Type: text/markdown" --data "# Hello, World!"
   ```
 
 ### Frequently Used Endpoints
