@@ -20,7 +20,7 @@
     "run_worker_first": true,
   },
   "build": {
-    "command": "make setup docs",
+    "command": "npm run gen",
     "cwd": "./",
     "watch_dir": "./src",
   },
