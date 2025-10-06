@@ -148,8 +148,7 @@ async function handle(req, env, ctx) {
           resp.headers.set("Content-Type", "text/html; charset=gb2312");
           return resp;
         default:
-          return notFound(req, pathname);
-      }
+          return env.ASSETS.fetch(req);
     }
     case "gzip":
     case "brotli":
