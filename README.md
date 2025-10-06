@@ -92,15 +92,15 @@ All endpoints accept any HTTP method. Additionally, it includes features not fou
 - `/cookies/delete?name=value`: Deletes cookies and redirects to `/cookies`
 - `/image/:type`: Returns a random image of the given type (png, jpeg, webp, svg)
 
-If you find an endpoint is missing or notice any unexpected behavior, we welcome you to [open an issue](https://github.com/jiacai2050/httpbin/issues) or [submit a pull request](https://github.com/jiacai2050/httpbin/pulls).
+If you find an endpoint is missing or notice any unexpected behavior, we welcome you to [open an issue](https://github.com/jiacai2050/edgebin/issues) or [submit a pull request](https://github.com/jiacai2050/edgebin/pulls).
 
 ## Deploy
 
 Feel free to deploy your own instance of httpbin. The free tier of Cloudflare Workers is sufficient for most use cases.
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/jiacai2050/httpbin)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/jiacai2050/edgebin)
 
-If you'd like to share your public instance, please [let us know](https://github.com/jiacai2050/httpbin/discussions/4) and we'll add it to the list.
+If you'd like to share your public instance, please [let us know](https://github.com/jiacai2050/edgebin/discussions/4) and we'll add it to the list.
 
 ### Public Instances
 
