@@ -140,8 +140,6 @@ async function handle(req, env, ctx) {
     case "encoding": {
       const charset = parts[1];
       switch (charset) {
-        case "utf8":
-          return env.ASSETS.fetch(req);
         case "gb2312":
           let resp = await env.ASSETS.fetch(req);
           resp = new Response(resp.body, resp);
@@ -149,6 +147,7 @@ async function handle(req, env, ctx) {
           return resp;
         default:
           return env.ASSETS.fetch(req);
+      }
     }
     case "gzip":
     case "brotli":
