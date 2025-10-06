@@ -55,3 +55,22 @@ export function stringToNumber(str) {
   }
   return num;
 }
+
+export function getDateString({
+  timeZone = "Asia/Shanghai",
+  format = "iso", // "iso" or "locale" or "ts" or "utc"
+  locale = "en-GB",
+}) {
+  switch (format) {
+    case "ts":
+    case "timestamp":
+      return Date.now();
+    case "locale":
+      return new Date().toLocaleString(locale, { timeZone });
+    case "utc":
+      return new Date().toUTCString();
+    case "iso":
+    default:
+      return new Date().toISOString();
+  }
+}

@@ -23,33 +23,41 @@ Supports most of the endpoints from the original [httpbin.org](https://httpbin.o
 - Cache
 - Anything
 
-All endpoints accept any HTTP method.
+All endpoints accept any HTTP method. Additionally, it includes features not found in the original httpbin:
 
-Additionally, it includes features not found in the original httpbin, such as IP Geolocation:
+- IP Geolocation:
 
-```bash
-curl https://httpbin.liujiacai.net/ip
-```
+  ```bash
+  curl https://httpbin.liujiacai.net/ip
+  ```
 
-Output:
+  Output:
 
-```json
-{
-  "origin": "2408:8240:e10:947c:2806:6bb2:c222:343c",
-  "continent": "AS",
-  "latitude": "30.29365",
-  "longitude": "120.16142",
-  "country": "CN",
-  "region": "Zhejiang",
-  "regionCode": "ZJ",
-  "city": "Hangzhou",
-  "postalCode": "310000",
-  "timezone": "Asia/Shanghai",
-  "asn": 4837,
-  "asOrganization": "China Unicom",
-  "colo": "LAX"
-}
-```
+  ```json
+  {
+    "origin": "2408:8240:e10:947c:2806:6bb2:c222:343c",
+    "continent": "AS",
+    "latitude": "30.29365",
+    "longitude": "120.16142",
+    "country": "CN",
+    "region": "Zhejiang",
+    "regionCode": "ZJ",
+    "city": "Hangzhou",
+    "postalCode": "310000",
+    "timezone": "Asia/Shanghai",
+    "asn": 4837,
+    "asOrganization": "China Unicom",
+    "colo": "LAX"
+  }
+  ```
+
+- WebSocket Echo:
+
+  This endpoint echoes back any message sent to it over a WebSocket connection. You can test it using [wscat](https://github.com/websockets/wscat):
+
+  ```bash
+  wscat -c wss://httpbin.liujiacai.net/ws
+  ```
 
 ### Frequently Used Endpoints
 
@@ -66,7 +74,8 @@ Output:
 - `/bearer`: Challenges HTTP Bearer Auth
 - `/cache/:max-age`: Returns a response with `Cache-Control: public, max-age=60`
 - `/response-headers?key=value`: Returns a response with the given headers
-- `bytes/:n`: Returns `n` random bytes
+- `/bytes/:n`: Returns `n` random bytes
+- `/date`: Returns current date and time
 - `/xml`: Returns a sample XML document
 - `/html`: Returns a sample HTML document
 - `/json`: Returns a sample JSON document

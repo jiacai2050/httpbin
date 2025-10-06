@@ -1,23 +1,10 @@
-import { CustomError, arrayBufferToBase64, stringToNumber } from "./utils.js";
-
-function addCorsHeaders(resp, origin) {
-  // Ensure CORS headers are set on all responses
-  if (origin) {
-    resp.headers.set("Access-Control-Allow-Origin", origin);
-    resp.headers.set("Access-Control-Allow-Credentials", "true");
-  } else {
-    resp.headers.set("Access-Control-Allow-Origin", "*");
-  }
-  resp.headers.set(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, PATCH, OPTIONS",
-  );
-  resp.headers.set(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization",
-  );
-  return resp;
-}
+import {
+  CustomError,
+  arrayBufferToBase64,
+  getDateString,
+  stringToNumber,
+} from "./utils.js";
+import { websocketHandler } from "./ws.js";
 
 export default {
   async fetch(req, env, ctx) {
@@ -49,6 +36,28 @@ export default {
     }
   },
 };
+
+// Add CORS headers to the response
+// If an Origin header is present in the request, echo it back in the response
+// Otherwise, allow all origins with "*"
+function addCorsHeaders(resp, origin) {
+  // Ensure CORS headers are set on all responses
+  if (origin) {
+    resp.headers.set("Access-Control-Allow-Origin", origin);
+    resp.headers.set("Access-Control-Allow-Credentials", "true");
+  } else {
+    resp.headers.set("Access-Control-Allow-Origin", "*");
+  }
+  resp.headers.set(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+  );
+  resp.headers.set(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization",
+  );
+  return resp;
+}
 
 async function handle(req, env, ctx) {
   const { pathname, searchParams } = new URL(req.url);
@@ -124,8 +133,20 @@ async function handle(req, env, ctx) {
       return handleCache(parts, searchParams, req);
 
     // Response formats: Testing different response formats
-    case "encoding":
-      return env.ASSETS.fetch(req);
+    case "encoding": {
+      const chatset = parts[1];
+      switch (chatset) {
+        case "utf8":
+          return env.ASSETS.fetch(req);
+        case "gb2312":
+          let resp = await env.ASSETS.fetch(req);
+          resp = new Response(resp.body, resp);
+          resp.headers.set("Content-Type", "text/html; charset=gb2312");
+          return resp;
+        default:
+          return notFound(req, pathname);
+      }
+    }
     case "gzip":
     case "brotli":
     case "deflate": {
@@ -136,7 +157,10 @@ async function handle(req, env, ctx) {
         deflate: "deflated",
       });
       const key = mapping[parts[0]] || parts[0];
-      return handleAnything(searchParams, req, headers, { [key]: true });
+      return handleAnything(searchParams, req, {
+        respHeaders: headers,
+        extra: { [key]: true },
+      });
     }
     case "html":
     case "xml":
@@ -201,7 +225,14 @@ async function handle(req, env, ctx) {
         ? Response.json({ uuid: uuids[0] })
         : Response.json({ uuids });
     }
-
+    case "date": {
+      return Response.json({
+        date: getDateString({
+          timeZone: req.cf?.timezone,
+          ...Object.fromEntries(searchParams),
+        }),
+      });
+    }
     // Cookies: Returns the cookies sent in the request
     case "cookies":
       return handleCookies(parts, searchParams, req);
@@ -237,8 +268,16 @@ async function handle(req, env, ctx) {
     // Anything: Accepts any request data and returns it back in JSON format
     case "anything":
       return handleAnything(searchParams, req);
+
+    // WebSocket echo server
+    case "ws":
+      return websocketHandler(req);
   }
 
+  return env.ASSETS.fetch(req);
+}
+
+function notFound(req, pathname) {
   return Response.json(
     { error: `'${req.url}' not found`, pathname },
     { status: 404 },
@@ -369,7 +408,7 @@ function handleCache(parts, searchParams, req) {
     "Last-Modified": new Date().toUTCString(),
     ETag: `"${seconds}"`,
   };
-  return handleAnything(searchParams, req, headers);
+  return handleAnything(searchParams, req, { respHeaders: headers });
 }
 
 function handleIp(req) {
@@ -398,7 +437,11 @@ function handleIp(req) {
   });
 }
 
-async function handleAnything(searchParams, req, respHeaders = {}, extra = {}) {
+async function handleAnything(
+  searchParams,
+  req,
+  { respHeaders = {}, extra = {} } = {},
+) {
   const ret = {
     ...extra,
     args: Object.fromEntries(searchParams),
