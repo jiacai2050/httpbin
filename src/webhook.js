@@ -71,7 +71,7 @@ async function discussionHandler(chat_id, payload, token) {
 async function pullHandler(chat_id, payload, token) {
   const action = payload["action"];
   if (action !== "opened") {
-    throw new Error(`pullHandler only care opened action, current:${action}`);
+    throw new CustomError(`pullHandler only care opened action, current:${action}`, 400);
   }
   const title = payload["pull_request"]["title"];
   const url = payload["pull_request"]["url"];
