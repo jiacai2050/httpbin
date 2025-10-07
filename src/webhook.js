@@ -94,7 +94,7 @@ async function sendTelegram(chat_id, message, url, token) {
     parse_mode: "MarkdownV2",
     link_preview_options: { url: url },
   };
-  console.log(`sendTelegram: msg:${message}, chat:{chat_id}`);
+  console.log(`sendTelegram: msg:${message}, chat:${chat_id}`);
   return await fetch(api, {
     method: "POST",
     headers: {
