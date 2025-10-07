@@ -82,10 +82,10 @@ async function pullHandler(chat_id, payload, token) {
     );
   }
   const title = payload["pull_request"]["title"];
-  const url = payload["pull_request"]["url"];
+  const html_url = payload["pull_request"]["html_url"];
   // const body = payload["pull_request"]["body"];
-  const msg = `[${normalize(title)}](${url})`;
-  return await sendTelegram(chat_id, msg, url, token);
+  const msg = `[${normalize(title)}](${html_url})`;
+  return await sendTelegram(chat_id, msg, html_url, token);
 }
 
 // Escape those chars according to https://core.telegram.org/bots/api#sendmessage
