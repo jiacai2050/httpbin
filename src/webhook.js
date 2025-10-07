@@ -18,7 +18,7 @@ export async function handleWebhook(searchParams, req) {
   }
 
   const payload = await req.json();
-  const login = payload["sender"]["login"];
+  // const login = payload["sender"]["login"];
   const event = req.headers.get("x-github-event");
   const chat_id = searchParams.get("tg_chat_id");
   const token = searchParams.get("tg_token");
@@ -32,6 +32,7 @@ export async function handleWebhook(searchParams, req) {
       return await discussionHandler(chat_id, payload, token);
     }
     case "pull_request": {
+      // https://docs.github.com/en/webhooks/webhook-events-and-payloads?actionType=opened#pull_request
       return await pullHandler(chat_id, payload, token);
     }
     default:
@@ -42,7 +43,10 @@ export async function handleWebhook(searchParams, req) {
 async function issueHandler(chat_id, payload, token) {
   const action = payload["action"];
   if (action !== "opened") {
-    throw new Error(`issueHandler only care open action, current:${action}`);
+    throw new CustomError(
+      `issueHandler only care open action, current:${action}`,
+      400,
+    );
   }
   const issue = payload["issue"];
   const html_url = issue["html_url"];
@@ -55,8 +59,9 @@ async function issueHandler(chat_id, payload, token) {
 async function discussionHandler(chat_id, payload, token) {
   const action = payload["action"];
   if (action !== "created") {
-    throw new Error(
+    throw new CustomError(
       `discussionHandler only cares about created action, current:${action}`,
+      400,
     );
   }
   const discussion = payload["discussion"];
@@ -71,7 +76,10 @@ async function discussionHandler(chat_id, payload, token) {
 async function pullHandler(chat_id, payload, token) {
   const action = payload["action"];
   if (action !== "opened") {
-    throw new CustomError(`pullHandler only care opened action, current:${action}`, 400);
+    throw new CustomError(
+      `pullHandler only care opened action, current:${action}`,
+      400,
+    );
   }
   const title = payload["pull_request"]["title"];
   const url = payload["pull_request"]["url"];

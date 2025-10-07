@@ -31,7 +31,7 @@ GET :BASE/anything?h=1&h=2
 #
 GET :BASE/html2md?text=<h1>Hello%20World</h1>
 #
-GET :BASE/mix?header=a:1&h=a:2
+GET :BASE/mix?h=a:1&h=a:2
 accept: application/json
 accept: text/html
 
