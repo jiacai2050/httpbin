@@ -71,7 +71,7 @@ All endpoints accept any HTTP method. Additionally, it includes features not fou
   curl "https://edgebin.liujiacai.net/html2md" --data "<h1>Hello, World!</h1>"
   ```
 
-- `/mix` likes `/anything`, but support specific query string to construct a custom response.
+- `/mix` is similar to `/anything`, but supports specific query strings to construct a custom response.
   - `s=:code`, sets the status code, e.g. `s=418`
   - `h=key:value`, adds a response header, e.g. `h=Content-Type:text/plain`
   - `r=location`, adds a redirect to the given location, e.g. `r=https://edgebin.liujiacai.net`
