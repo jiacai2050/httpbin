@@ -25,13 +25,7 @@ Supports most of the endpoints from the original [httpbin.org](https://httpbin.o
 
 All endpoints accept any HTTP method. Additionally, it includes features not found in the original httpbin:
 
-- IP Geolocation:
-
-  ```bash
-  curl https://edgebin.liujiacai.net/ip
-  ```
-
-  Output:
+- [/ip](https://edgebin.liujiacai.net/ip) returns the requester's IP address along with geolocation information such as country, region, city, ASN, and more.
 
   ```json
   {
@@ -51,37 +45,36 @@ All endpoints accept any HTTP method. Additionally, it includes features not fou
   }
   ```
 
-- WebSocket Echo:
-
-  This endpoint echoes back any message sent to it over a WebSocket connection. You can test it using [wscat](https://github.com/websockets/wscat):
+- `/ws` echoes back any message sent to it over a WebSocket connection. You can test it using [wscat](https://github.com/websockets/wscat):
 
   ```bash
   wscat -c wss://edgebin.liujiacai.net/ws
   ```
 
-- QR Code Generation:
+- [/qrcode](https://edgebin.liujiacai.net/qrcode?text=https://edgebin.liujiacai.net) generates QR codes(svg) for any text or URL. Use query parameters to [customize](https://github.com/soldair/node-qrcode#renderers-options) the output:
+  - `text`: The text or URL to encode (required)
+  - `errorCorrectionLevel`: Error correction level, one of `L`, `M`, `Q`, `H`. Default is `H`.
+  - `width`: Width of the QR code in pixels. Default is `350`.
+  - `margin`: Define how much wide the quiet zone should be. Default is `4`.
+  - `scale`: Scale factor. A value of 1 means 1px per modules (black dots). Default is `4`.
 
-  Generate QR codes(svg) for any text or URL. For example, to generate a QR code for "Hello, World!":
+  ![](https://edgebin.liujiacai.net/qrcode?text=https://edgebin.liujiacai.net&width=200)
 
-  ```bash
-  curl "https://edgebin.liujiacai.net/qrcode?text=Hello%2C%20World!"
-  ```
-  ![](https://edgebin.liujiacai.net/qrcode?width=200&text=Hello%2C%20World!)
+- `/md2html`, `/html2md` converts between html and markdown. Use following methods to pass data:
+  - `POST` request with raw body
+  - `url` query parameter to convert a webpage
+  - `text` query parameter to convert a short text.
 
-- Conversion between html and markdown:
 
   ```bash
   curl "https://edgebin.liujiacai.net/md2html" --data "# Hello, World!"
-  ```
-
-  ```bash
   curl "https://edgebin.liujiacai.net/html2md" --data "<h1>Hello, World!</h1>"
   ```
-  or use `url` parameter to convert a webpage:
 
-  ```bash
-  curl "https://edgebin.liujiacai.net/html2md?url=https://edgebin.liujiacai.net"
-  ```
+- `/mix` is similar to `/anything`, but supports specific query strings to construct a custom response.
+  - `s=:code`, sets the status code, e.g. `s=418`
+  - `h=key:value`, adds a response header, e.g. `h=Content-Type:text/plain`
+  - `r=location`, adds a redirect to the given location, e.g. `r=https://edgebin.liujiacai.net`
 
 
 ### Frequently Used Endpoints
@@ -153,4 +146,4 @@ In the future, we may support other edge platforms like Vercel Edge Functions an
 
 ## License
 
-[MIT License](LICENSE)
+[MIT License](https://github.com/jiacai2050/edgebin/blob/main/LICENSE)
