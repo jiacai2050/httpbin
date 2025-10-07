@@ -65,17 +65,21 @@ All endpoints accept any HTTP method. Additionally, it includes features not fou
   - `url` query parameter to convert a webpage
   - `text` query parameter to convert a short text.
 
-
   ```bash
-  curl "https://edgebin.liujiacai.net/md2html" --data "# Hello, World!"
-  curl "https://edgebin.liujiacai.net/html2md" --data "<h1>Hello, World!</h1>"
+  curl "https://edgebin.liujiacai.net/md2html" --data "# Hello, World"
+  curl "https://edgebin.liujiacai.net/html2md" --data "<h1>Hello, World</h1>"
   ```
 
-- `/mix` is similar to `/anything`, but supports specific query strings to construct a custom response.
-  - `s=:code`, sets the status code, e.g. `s=418`
-  - `h=key:value`, adds a response header, e.g. `h=Content-Type:text/plain`
-  - `r=location`, adds a redirect to the given location, e.g. `r=https://edgebin.liujiacai.net`
+- [/date](https://edgebin.liujiacai.net/date): Returns current date and time.
+  Supports the following query parameters to control output:
+  - `format`: Output format. One of `iso`, `locale`, `ts`, `timestamp`, `utc`. Default is `iso`.
+  - `locale`: [BCP47 locale](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) string, e.g., `en-US`, `zh-CN`. Used when `format=locale`.
+  - `timeZone`: [IANA time zone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), e.g., `Asia/Shanghai`.
 
+- `/mix` returns what you send in the request body, and supports specific query strings as directives to construct a custom response.
+  - `s=code`, sets the status code, e.g. `s=418`
+  - `h=key:value`, adds a response header, e.g. `h=Content-Type:text/plain`
+  - `d=delay`, delays the response by `delay` seconds, e.g. `d=3`
 
 ### Frequently Used Endpoints
 
@@ -93,11 +97,6 @@ All endpoints accept any HTTP method. Additionally, it includes features not fou
 - `/cache/:max-age`: Returns a response with `Cache-Control: public, max-age=60`
 - `/response-headers?key=value`: Returns a response with the given headers
 - `/bytes/:n`: Returns `n` random bytes
-- `/date`: Returns current date and time.
-  Supports the following query parameters to control output:
-  - `format`: Output format. One of `iso`, `locale`, `ts`, `timestamp`, `utc`. Default is `iso`.
-  - `locale`: [BCP47 locale](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) string, e.g., `en-US`, `zh-CN`. Used when `format=locale`.
-  - `timeZone`: [IANA time zone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), e.g., `Asia/Shanghai`.
 - `/xml`: Returns a sample XML document
 - `/html`: Returns a sample HTML document
 - `/json`: Returns a sample JSON document

@@ -120,3 +120,9 @@ export function objectFromPairs(pairs) {
   }
   return object;
 }
+
+export async function sleep(seconds) {
+  await new Promise((resolve) =>
+    setTimeout(resolve, Math.min(seconds, 10) * 1000),
+  );
+}

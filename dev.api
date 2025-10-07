@@ -35,6 +35,12 @@ GET :BASE/mix?h=a:1&h=a:2
 accept: application/json
 accept: text/html
 
+abc
+#
+GET https://httpbun.org/mix?h=a:1&h=a:2&body=123&r=example.com
+accept: application/json
+accept: text/html
+
 #
 :HTTPBIN = https://httpbin.org
 #
