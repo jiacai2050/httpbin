@@ -3,7 +3,9 @@ import { handleHtmlToMarkdown, handleMarkdownToHtml } from "./markdown.js";
 import {
   CustomError,
   arrayBufferToBase64,
+  extractIp,
   getDateString,
+  objectFromPairs,
   stringToNumber,
 } from "./utils.js";
 import { websocketHandler } from "./ws.js";
@@ -109,7 +111,7 @@ async function handle(req, env, ctx) {
       return Response.json(Object.fromEntries(req.headers));
     case "ip":
     case "ipgeo":
-      return handleIp(req);
+      return Response.json(extractIp(req));
     case "user-agent":
       return Response.json({
         "user-agent": req.headers.get("User-Agent") || "unknown",
@@ -117,21 +119,7 @@ async function handle(req, env, ctx) {
 
     // Response inspection: Inspecting the response data
     case "response-headers": {
-      const body = {};
-      for (const [key, value] of [...req.headers, ...searchParams]) {
-        if (body.hasOwnProperty(key)) {
-          // If the key already exists, we need to create or append to an array.
-          if (!Array.isArray(body[key])) {
-            body[key] = [body[key]]; // Convert the existing value to an array
-          }
-          body[key].push(value);
-        } else {
-          // If the key doesn't exist, just set the value.
-          body[key] = value;
-        }
-      }
-
-      // Response headers are built from query params (this part is a clear improvement)
+      const body = objectFromPairs([...req.headers, ...searchParams]);
       const headers = new Headers(searchParams);
       return Response.json(body, { headers });
     }
@@ -279,19 +267,37 @@ async function handle(req, env, ctx) {
     case "anything":
       return handleAnything(searchParams, req);
 
+    case "mix": {
+      const respHeaders = new Headers();
+      const redirectLocation = searchParams.get("r");
+      let status = 200;
+      if (redirectLocation) {
+        respHeaders.set("Location", redirectLocation);
+        status = 302;
+      }
+      if (searchParams.has("s")) {
+        status = stringToNumber(searchParams.get("s"));
+      }
+
+      searchParams.getAll("h")?.forEach((h) => {
+        const idx = h.indexOf(":");
+        if (idx > 0) {
+          const [key, value] = [h.slice(0, idx), h.slice(idx + 1)];
+          respHeaders.append(key.trim(), value.trim());
+        }
+      });
+      return handleAnything(searchParams, req, {
+        respHeaders,
+        status,
+      });
+    }
+
     // WebSocket echo server
     case "ws":
       return websocketHandler(req);
   }
 
   return env.ASSETS.fetch(req);
-}
-
-function notFound(req, pathname) {
-  return Response.json(
-    { error: `'${req.url}' not found`, pathname },
-    { status: 404 },
-  );
 }
 
 function handleBasicAuth(parts, searchParams, req) {
@@ -421,45 +427,21 @@ function handleCache(parts, searchParams, req) {
   return handleAnything(searchParams, req, { respHeaders: headers });
 }
 
-function handleIp(req) {
-  // https://developers.cloudflare.com/workers/runtime-apis/request/#incomingrequestcfproperties
-  const cf = req.cf || {};
-  return Response.json({
-    origin:
-      req.headers.get("CF-Connecting-IP") || req.headers.get("X-Forwarded-For"),
-    continent: cf.continent,
-    latitude: cf.latitude,
-    longitude: cf.longitude,
-    country: cf.country,
-    region: cf.region,
-    regionCode: cf.regionCode,
-    city: cf.city,
-    postalCode: cf.postalCode,
-    timezone: cf.timezone,
-    // ASN of the incoming request,
-    asn: cf.asn,
-    // The organization which owns the ASN of the incoming request, for example, Google Cloud.
-    asOrganization: cf.asOrganization,
-    // The three-letter IATA ↗ airport code of the data center that the request hit, for example, "DFW".
-    colo: cf.colo,
-    // Metro code (DMA) of the incoming request, for example, "635".
-    metroCode: cf.metroCode,
-  });
-}
-
 async function handleAnything(
   searchParams,
   req,
-  { respHeaders = {}, extra = {} } = {},
+  { respHeaders = {}, extra = {}, status = 200 } = {},
 ) {
+  if (status < 200 || status > 599) {
+    throw new CustomError("Status code must be in range [200, 599]", 400);
+  }
   const ret = {
-    ...extra,
-    args: Object.fromEntries(searchParams),
+    args: objectFromPairs(searchParams),
     headers: Object.fromEntries(req.headers),
-    origin:
-      req.headers.get("CF-Connecting-IP") || req.headers.get("X-Forwarded-For"),
+    ipgeo: extractIp(req),
     url: req.url,
     method: req.method,
+    ...extra,
   };
   if (searchParams.get("raw") === "1") {
     const cf = req.cf || {};
@@ -470,10 +452,7 @@ async function handleAnything(
     Object.assign(ret, bodyObj);
   }
 
-  if (Object.keys(respHeaders).length > 0) {
-    return Response.json(ret, { headers: respHeaders });
-  }
-  return Response.json(ret);
+  return Response.json(ret, { headers: respHeaders, status });
 }
 
 async function readRequestBody(request) {

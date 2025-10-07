@@ -285,7 +285,7 @@ describe("cookies", () => {
 
 describe("anything", () => {
   it("anything json", async () => {
-    const req = new Request(`${ROOT}/anything/123`, {
+    const req = new Request(`${ROOT}/anything/123?a=1&a=2&a=3&b=4`, {
       method: "PUT",
       headers: {
         "User-Agent": "Cloudflare Workers",
@@ -296,9 +296,10 @@ describe("anything", () => {
     const response = await do_request(req);
     expect(response.status).toBe(200);
     const json = await response.json();
-    expect(json["url"]).toBe(`${ROOT}/anything/123`);
+    expect(json["url"]).toMatch(`${ROOT}/anything/123`);
     expect(json["method"]).toStrictEqual("PUT");
     expect(json["json"]).toStrictEqual({ a: 1, b: 2 });
+    expect(json["args"]).toStrictEqual({ a: ["1", "2", "3"], b: "4" });
     expect(json["headers"]).toBeDefined();
   });
 

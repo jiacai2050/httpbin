@@ -11,8 +11,6 @@ export async function handleQRCode(userOptions) {
   };
   const text = options["text"];
   switch (options["type"]) {
-    case "terminal":
-    case "utf8":
     case "svg": {
       const svg = await QRCode.toString(text, options);
       return new Response(svg, {

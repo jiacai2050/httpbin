@@ -27,7 +27,13 @@ Accept:application/json
 #
 GET :BASE/cookies/set?a=1&b=2
 #
+GET :BASE/anything?h=1&h=2
+#
 GET :BASE/html2md?text=<h1>Hello%20World</h1>
+#
+GET :BASE/mix?h=a:1&h=a:2
+accept: application/json
+accept: text/html
 
 #
 :HTTPBIN = https://httpbin.org
@@ -50,6 +56,7 @@ GET :HTTPBIN/encoding/utf8
 GET :HTTPBIN/html
 #
 GET :HTTPBIN/bearer
-
+#
+GET :HTTPBIN/anything?h=1
 #
 GET :HTTPBIN/response-headers?freeform=123&freeform=456

@@ -74,3 +74,49 @@ export function getDateString({
       return new Date().toISOString();
   }
 }
+
+export function extractIp(req) {
+  // https://developers.cloudflare.com/workers/runtime-apis/request/#incomingrequestcfproperties
+  const cf = req.cf || {};
+  return {
+    origin:
+      req.headers.get("CF-Connecting-IP") || req.headers.get("X-Forwarded-For"),
+    continent: cf.continent,
+    latitude: cf.latitude,
+    longitude: cf.longitude,
+    country: cf.country,
+    region: cf.region,
+    regionCode: cf.regionCode,
+    city: cf.city,
+    postalCode: cf.postalCode,
+    timezone: cf.timezone,
+    // ASN of the incoming request,
+    asn: cf.asn,
+    // The organization which owns the ASN of the incoming request, for example, Google Cloud.
+    asOrganization: cf.asOrganization,
+    // The three-letter IATA ↗ airport code of the data center that the request hit, for example, "DFW".
+    colo: cf.colo,
+    // Metro code (DMA) of the incoming request, for example, "635".
+    metroCode: cf.metroCode,
+  };
+}
+
+/// Convert an array of key-value pairs into an object.
+/// If a key appears multiple times, its values are collected into an array.
+/// E.g. [['a', 1], ['b', 2], ['a', 3]] => { a: [1, 3], b: 2 }
+export function objectFromPairs(pairs) {
+  const object = {};
+  for (const [key, value] of pairs) {
+    if (object.hasOwnProperty(key)) {
+      // If the key already exists, we need to create or append to an array.
+      if (!Array.isArray(object[key])) {
+        object[key] = [object[key]]; // Convert the existing value to an array
+      }
+      object[key].push(value);
+    } else {
+      // If the key doesn't exist, just set the value.
+      object[key] = value;
+    }
+  }
+  return object;
+}
