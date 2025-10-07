@@ -68,13 +68,21 @@ All endpoints accept any HTTP method. Additionally, it includes features not fou
   ```
   ![](https://edgebin.liujiacai.net/qrcode?width=200&text=Hello%2C%20World!)
 
-- Markdown Rendering:
-
-  Render Markdown content to HTML. For example:
+- Conversion between html and markdown:
 
   ```bash
-  curl -X POST "https://edgebin.liujiacai.net/markdown" -H "Content-Type: text/markdown" --data "# Hello, World!"
+  curl "https://edgebin.liujiacai.net/md2html" --data "# Hello, World!"
   ```
+
+  ```bash
+  curl "https://edgebin.liujiacai.net/html2md" --data "<h1>Hello, World!</h1>"
+  ```
+  or use `url` parameter to convert a webpage:
+
+  ```bash
+  curl "https://edgebin.liujiacai.net/html2md?url=https://edgebin.liujiacai.net"
+  ```
+
 
 ### Frequently Used Endpoints
 

@@ -1,5 +1,5 @@
 import { handleQRCode } from "./qrcode.js";
-import { handleMarkdown } from "./markdown.js";
+import { handleHtmlToMarkdown, handleMarkdownToHtml } from "./markdown.js";
 import {
   CustomError,
   arrayBufferToBase64,
@@ -171,8 +171,6 @@ async function handle(req, env, ctx) {
     case "json":
       // response.html response.xml response.json
       return env.ASSETS.fetch(new URL(`/response.${parts[0]}`, req.url));
-    case "robots.txt":
-      return env.ASSETS.fetch(req);
     case "deny":
       return env.ASSETS.fetch(new URL(`/deny.txt`, req.url));
 
@@ -240,8 +238,10 @@ async function handle(req, env, ctx) {
     case "qrcode":
       return await handleQRCode(Object.fromEntries(searchParams));
 
-    case "markdown":
-      return await handleMarkdown(req, searchParams);
+    case "md2html":
+      return await handleMarkdownToHtml(req, searchParams);
+    case "html2md":
+      return await handleHtmlToMarkdown(req, searchParams);
 
     // Cookies: Returns the cookies sent in the request
     case "cookies":
@@ -514,7 +514,6 @@ async function readRequestBody(request) {
   } else {
     // Perhaps some other type of data was submitted in the form
     // like an image, or some other binary data.
-    console.log("other content-type:", contentType);
     const arrayBuffer = await request.arrayBuffer();
     if (arrayBuffer.byteLength === 0) {
       return {};
