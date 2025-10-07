@@ -98,7 +98,7 @@ async function sendTelegram(chat_id, message, url, token) {
   const api = `https://api.telegram.org/bot${token}/sendMessage`;
   const payload = {
     text: message,
-    chat_id: chat_id,
+    chat_id,
     parse_mode: "MarkdownV2",
     link_preview_options: { url: url },
   };
