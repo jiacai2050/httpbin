@@ -338,7 +338,7 @@ async function do_request(request) {
   if (typeof request === "string") {
     request = new Request(request);
   }
-  // Create an empty context to pass to `worker.do_request()`
+  // Create an empty context to pass to `worker.fetch()`
   const ctx = createExecutionContext();
   const response = await worker.fetch(request, env, ctx);
   // Wait for all `Promise`s passed to `ctx.waitUntil()` to settle before running test assertions
