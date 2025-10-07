@@ -279,7 +279,7 @@ async function handle(req, env, ctx) {
         status = stringToNumber(searchParams.get("s"));
       }
 
-      searchParams.getAll("h")?.forEach((h) => {
+      searchParams.getAll("h").forEach((h) => {
         const idx = h.indexOf(":");
         if (idx > 0) {
           const [key, value] = [h.slice(0, idx), h.slice(idx + 1)];
