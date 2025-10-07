@@ -76,7 +76,7 @@ All endpoints accept any HTTP method. Additionally, it includes features not fou
   - `locale`: [BCP47 locale](https://www.rfc-editor.org/rfc/bcp/bcp47.txt) string, e.g., `en-US`, `zh-CN`. Used when `format=locale`.
   - `timeZone`: [IANA time zone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones), e.g., `Asia/Shanghai`.
 
-- `/mix` returns what you send in the request body，and supports specific query strings as directives to construct a custom response.
+- `/mix` returns what you send in the request body, and supports specific query strings as directives to construct a custom response.
   - `s=code`, sets the status code, e.g. `s=418`
   - `h=key:value`, adds a response header, e.g. `h=Content-Type:text/plain`
   - `d=delay`, delays the response by `delay` seconds, e.g. `d=3`
