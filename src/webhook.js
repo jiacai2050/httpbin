@@ -77,7 +77,7 @@ async function pullHandler(chat_id, payload, token) {
   const action = payload["action"];
   if (action !== "opened") {
     throw new CustomError(
-      `pullHandler only care opened action, current:${action}`,
+      `pullHandler only cares about opened action, current:${action}`,
       400,
     );
   }
