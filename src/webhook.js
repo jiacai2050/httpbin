@@ -44,7 +44,7 @@ async function issueHandler(chat_id, payload, token) {
   const action = payload["action"];
   if (action !== "opened") {
     throw new CustomError(
-      `issueHandler only care open action, current:${action}`,
+      `issueHandler only cares about opened action, current:${action}`,
       400,
     );
   }
