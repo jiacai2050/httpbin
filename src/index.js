@@ -6,9 +6,12 @@ import {
   extractIp,
   getDateString,
   objectFromPairs,
+  sleep,
   stringToNumber,
 } from "./utils.js";
 import { websocketHandler } from "./ws.js";
+import { handleMix } from "./mix.js";
+import { handleWebhook } from "./webhook.js";
 
 export default {
   async fetch(req, env, ctx) {
@@ -103,15 +106,22 @@ async function handle(req, env, ctx) {
         throw new CustomError("Status code is required", 400);
       }
       const code = stringToNumber(parts[1]);
-      return Response.json({ code: code }, { status: code });
+      return Response.json({ code }, { status: code });
     }
 
     // Request inspection: Inspecting the request data
     case "headers":
-      return Response.json(Object.fromEntries(req.headers));
+      return new Response(
+        JSON.stringify(Object.fromEntries(req.headers), null, 2),
+        {
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+        },
+      );
     case "ip":
     case "ipgeo":
-      return Response.json(extractIp(req));
+      return new Response(JSON.stringify(extractIp(req), null, 2), {
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+      });
     case "user-agent":
       return Response.json({
         "user-agent": req.headers.get("User-Agent") || "unknown",
@@ -121,7 +131,8 @@ async function handle(req, env, ctx) {
     case "response-headers": {
       const body = objectFromPairs([...req.headers, ...searchParams]);
       const headers = new Headers(searchParams);
-      return Response.json(body, { headers });
+      headers.set("Content-Type", "application/json; charset=utf-8");
+      return new Response(JSON.stringify(body, null, 2), { headers });
     }
     case "cache":
       return handleCache(parts, searchParams, req);
@@ -167,8 +178,8 @@ async function handle(req, env, ctx) {
       if (parts.length === 1) {
         throw new CustomError("Delay seconds is required", 400);
       }
-      const delay = Math.min(stringToNumber(parts[1]), 10);
-      await new Promise((resolve) => setTimeout(resolve, delay * 1000));
+      const delay = stringToNumber(parts[1]);
+      await sleep(delay);
       return Response.json({ delay });
     }
     case "bytes": {
@@ -267,30 +278,11 @@ async function handle(req, env, ctx) {
     case "anything":
       return handleAnything(searchParams, req);
 
-    case "mix": {
-      const respHeaders = new Headers();
-      const redirectLocation = searchParams.get("r");
-      let status = 200;
-      if (redirectLocation) {
-        respHeaders.set("Location", redirectLocation);
-        status = 302;
-      }
-      if (searchParams.has("s")) {
-        status = stringToNumber(searchParams.get("s"));
-      }
+    case "mix":
+      return handleMix(searchParams, req);
 
-      searchParams.getAll("h").forEach((h) => {
-        const idx = h.indexOf(":");
-        if (idx > 0) {
-          const [key, value] = [h.slice(0, idx), h.slice(idx + 1)];
-          respHeaders.append(key.trim(), value.trim());
-        }
-      });
-      return handleAnything(searchParams, req, {
-        respHeaders,
-        status,
-      });
-    }
+    case "webhook":
+      return handleWebhook(searchParams, req);
 
     // WebSocket echo server
     case "ws":
@@ -435,24 +427,26 @@ async function handleAnything(
   if (status < 200 || status > 599) {
     throw new CustomError("Status code must be in range [200, 599]", 400);
   }
-  const ret = {
+  const body = {
     args: objectFromPairs(searchParams),
     headers: Object.fromEntries(req.headers),
-    ipgeo: extractIp(req),
+    ip_geo: extractIp(req),
     url: req.url,
     method: req.method,
     ...extra,
   };
   if (searchParams.get("raw") === "1") {
-    const cf = req.cf || {};
-    Object.assign(ret, { cf });
-    ret["body"] = await req.text();
+    Object.assign(body, { cf: req.cf });
+    body["raw_body"] = await req.text();
   } else {
-    const bodyObj = await readRequestBody(req);
-    Object.assign(ret, bodyObj);
+    Object.assign(body, await readRequestBody(req));
   }
 
-  return Response.json(ret, { headers: respHeaders, status });
+  respHeaders["Content-Type"] = "application/json; charset=utf-8";
+  return new Response(JSON.stringify(body, null, 2), {
+    headers: respHeaders,
+    status,
+  });
 }
 
 async function readRequestBody(request) {
