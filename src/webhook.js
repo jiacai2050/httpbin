@@ -1,4 +1,4 @@
-import { CustomError } from "./utils";
+import { CustomError } from "./utils.js";
 
 export async function handleWebhook(searchParams, req) {
   const from = searchParams.get("from");
