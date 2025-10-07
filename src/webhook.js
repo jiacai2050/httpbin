@@ -56,7 +56,7 @@ async function discussionHandler(chat_id, payload, token) {
   const action = payload["action"];
   if (action !== "created") {
     throw new Error(
-      `discussionHandler only care created action, current:${action}`,
+      `discussionHandler only cares about created action, current:${action}`,
     );
   }
   const discussion = payload["discussion"];
