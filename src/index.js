@@ -436,7 +436,7 @@ async function handleAnything(
     ...extra,
   };
   if (searchParams.get("raw") === "1") {
-    Object.assign(body, { cf: req.cf });
+    Object.assign(body, { cf: req.cf || {} });
     body["raw_body"] = await req.text();
   } else {
     Object.assign(body, await readRequestBody(req));
