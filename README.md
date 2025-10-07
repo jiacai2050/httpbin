@@ -70,6 +70,8 @@ All endpoints accept any HTTP method. Additionally, it includes features not fou
   curl "https://edgebin.liujiacai.net/html2md" --data "<h1>Hello, World</h1>"
   ```
 
+- [/page-meta](https://edgebin.liujiacai.net/page-meta?url=https://github.com/jiacai2050/edgebin): Fetches a webpage and extracts its metadata (title, description, image, etc.). Use the `url` query parameter to specify the target webpage.
+
 - [/date](https://edgebin.liujiacai.net/date): Returns current date and time.
   Supports the following query parameters to control output:
   - `format`: Output format. One of `iso`, `locale`, `ts`, `timestamp`, `utc`. Default is `iso`.

@@ -1,7 +1,7 @@
-import { CustomError } from "./utils.js";
+import { getTextInput } from "./utils.js";
 
 export async function handleMarkdownToHtml(req, searchParams) {
-  const markdown = await getInput(req, searchParams);
+  const markdown = await getTextInput(req, searchParams);
   const module = await import("marked");
   return new Response(module.marked.parse(markdown), {
     headers: { "Content-Type": "text/html; charset=utf-8" },
@@ -9,7 +9,7 @@ export async function handleMarkdownToHtml(req, searchParams) {
 }
 
 export async function handleHtmlToMarkdown(req, searchParams) {
-  const html = await getInput(req, searchParams);
+  const html = await getTextInput(req, searchParams);
   // static import causes issues when running tests
   // TypeError: Cannot read properties of undefined (reading 'SelectorType')
   // node_modules/css-select/lib/sort.js:6:17
@@ -17,19 +17,4 @@ export async function handleHtmlToMarkdown(req, searchParams) {
   return new Response(module.NodeHtmlMarkdown.translate(html), {
     headers: { "Content-Type": "text/markdown; charset=utf-8" },
   });
-}
-
-async function getInput(req, searchParams) {
-  const url = searchParams.get("url");
-  if (url) {
-    const resp = await fetch(url, req);
-    if (!resp.ok) {
-      throw new CustomError(`Failed to fetch URL: ${url}`, resp.status);
-    }
-    return await resp.text();
-  }
-  const text = (await req.text()) || searchParams.get("text");
-  if (text) return text;
-
-  throw new CustomError("No input provided", 400);
 }

@@ -3,13 +3,8 @@ import { CustomError } from "./utils.js";
 export async function handleWebhook(searchParams, req) {
   const from = searchParams.get("from");
   const to = searchParams.get("to");
-
-  if (!from || !to) {
-    throw new CustomError("Missing 'from' or 'to' parameter", 400);
-  }
-
   if (from !== "github" || to !== "telegram") {
-    throw new CustomError("Unsupported 'from' or 'to' value", 400);
+    throw new CustomError("Only support (github, telegram) for now", 400);
   }
 
   const ua = req.headers.get("user-agent") || "";
@@ -35,17 +30,17 @@ export async function handleWebhook(searchParams, req) {
       // https://docs.github.com/en/webhooks/webhook-events-and-payloads?actionType=opened#pull_request
       return await pullHandler(chat_id, payload, token);
     }
-    default:
-      throw new CustomError(`Unsupported GitHub event: ${event}`, 400);
+    default: {
+      return new Response("pong");
+    }
   }
 }
 
 async function issueHandler(chat_id, payload, token) {
   const action = payload["action"];
   if (action !== "opened") {
-    throw new CustomError(
+    return new Response(
       `issueHandler only cares about opened action, current:${action}`,
-      400,
     );
   }
   const issue = payload["issue"];
@@ -59,9 +54,8 @@ async function issueHandler(chat_id, payload, token) {
 async function discussionHandler(chat_id, payload, token) {
   const action = payload["action"];
   if (action !== "created") {
-    throw new CustomError(
+    return new Response(
       `discussionHandler only cares about created action, current:${action}`,
-      400,
     );
   }
   const discussion = payload["discussion"];
@@ -76,9 +70,8 @@ async function discussionHandler(chat_id, payload, token) {
 async function pullHandler(chat_id, payload, token) {
   const action = payload["action"];
   if (action !== "opened") {
-    throw new CustomError(
+    return new Response(
       `pullHandler only cares about opened action, current:${action}`,
-      400,
     );
   }
   const title = payload["pull_request"]["title"];
