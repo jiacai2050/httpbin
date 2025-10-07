@@ -26,6 +26,8 @@ GET :BASE/response-headers?freeform=123&freeform=456&freeform=789&another=1
 Accept:application/json
 #
 GET :BASE/cookies/set?a=1&b=2
+#
+GET :BASE/html2md?text=<h1>Hello%20World</h1>
 
 #
 :HTTPBIN = https://httpbin.org

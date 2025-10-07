@@ -7,6 +7,7 @@
   "name": "edgebin",
   "main": "src/index.js",
   "compatibility_date": "2025-10-04",
+  "compatibility_flags": ["nodejs_compat"],
   "observability": {
     "enabled": true,
   },
@@ -20,7 +21,7 @@
     "run_worker_first": true,
   },
   "build": {
-    "command": "npm run gen",
+    "command": "npm run build",
     "cwd": "./",
     "watch_dir": "./src",
   },
