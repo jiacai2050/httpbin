@@ -138,6 +138,12 @@ export async function getTextInput(req, searchParams) {
     if (!resp.ok) {
       throw new CustomError(`Failed to fetch URL: ${url}`, resp.status);
     }
+    if (!resp.headers.get("Content-Type")?.includes("text")) {
+      throw new CustomError(
+        `URL does not point to a text resource: ${url}`,
+        400,
+      );
+    }
     return await resp.text();
   }
   const text = (await req.text()) || searchParams.get("text");

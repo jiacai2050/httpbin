@@ -1,14 +1,19 @@
 import { CustomError } from "./utils.js";
-/* global HTMLRewriter:readonly */
 
 class TitleExtractor {
   constructor() {
     this.title = null;
+    this._buffer = "";
   }
 
+  // https://developers.cloudflare.com/workers/runtime-apis/html-rewriter/#text-chunks
   text(text) {
-    if (text.text.trim().length > 0) {
-      this.title = text.text;
+    this._buffer += text.text;
+    if (text.lastInTextNode) {
+      const trimmed = this._buffer.trim();
+      if (trimmed) {
+        this.title = trimmed;
+      }
     }
   }
 }
@@ -44,6 +49,9 @@ export async function handlePageMeta(req, searchParams) {
       `Failed to fetch the URL: ${response.status} ${response.statusText}`,
       400,
     );
+  }
+  if (!response.headers.get("Content-Type")?.includes("text/html")) {
+    return response;
   }
 
   const titleExtractor = new TitleExtractor();
