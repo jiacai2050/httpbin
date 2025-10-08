@@ -58,7 +58,7 @@ export async function handlePageMeta(req, searchParams) {
     JSON.stringify(
       {
         title: titleExtractor.title,
-        url: response.url, //  final URL obtained after any redirects.
+        url: response.url, // final URL obtained after any redirects.
         ...metaExtractor.metaTags,
       },
       null,
