@@ -52,7 +52,7 @@ export async function handlePageMeta(req, searchParams) {
     .on("title", titleExtractor)
     .on("meta", metaExtractor)
     .transform(response)
-    .arrayBuffer(); // 消费响应以确保 HTMLRewriter 完成处理
+    .arrayBuffer(); // Consume the response to ensure HTMLRewriter completes processing
 
   return new Response(
     JSON.stringify(
