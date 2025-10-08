@@ -121,6 +121,8 @@ Feel free to deploy your own instance of httpbin. The free tier of Cloudflare Wo
 
 If you'd like to share your public instance, please [let us know](https://github.com/jiacai2050/edgebin/discussions/4) and we'll add it to the list.
 
+We have a Telegram group for discussion: [https://t.me/edgebin](https://t.me/edgebin).
+
 ### Public Instances
 
 | Instance                        | Maintainer                                   |
