@@ -81,7 +81,7 @@ const STATIC_ROUTES = {
   "/image/png": "image.png",
   "/image/jpeg": "image.jpeg",
   "/image/webp": "image.webp",
-  "/image/svg": "image.svg",
+  "/image/svg": "logo.svg",
 };
 
 async function handle(req, env, ctx) {
@@ -256,10 +256,6 @@ async function handle(req, env, ctx) {
     case "cookies":
       return handleCookies(parts, searchParams, req);
 
-    // Images
-    case "image":
-      return handleImage(parts, searchParams, req, env);
-
     // Redirection: Testing redirection behavior
     case "redirect-to": {
       const url = searchParams.get("url");
@@ -361,44 +357,6 @@ function handleCookies(parts, searchParams, req) {
     default:
       throw new CustomError(`Unknown cookie action: ${action}`, 400);
   }
-}
-
-function handleImage(parts, searchParams, req, env) {
-  let format = "png";
-  if (parts.length === 1) {
-    const validAccepts = [
-      "image/webp",
-      "image/svg+xml",
-      "image/jpeg",
-      "image/png",
-      "image/*",
-    ];
-    const accept = req.headers.get("Accept");
-    if (!accept) {
-      throw new CustomError(
-        `Unsupported Accept header, must be one of ${validAccepts.join(", ")}`,
-        406,
-      );
-    }
-    if (validAccepts.includes(accept)) {
-      if (accept === "image/*") {
-        format = "png";
-      } else if (accept === "image/svg+xml") {
-        format = "svg";
-      } else {
-        format = accept.split("/")[1];
-      }
-    } else {
-      throw new CustomError(
-        `Unsupported Accept header, must be one of ${validAccepts.join(", ")}`,
-        406,
-      );
-    }
-  } else {
-    // /image/{format}
-    format = parts[1];
-  }
-  return env.ASSETS.fetch(new URL(`/image.${format}`, req.url));
 }
 
 function handleCache(parts, searchParams, req) {

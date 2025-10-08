@@ -7,14 +7,10 @@
   "name": "edgebin",
   "main": "src/index.js",
   "compatibility_date": "2025-10-04",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "observability": {
     "enabled": true,
   },
-  /**
-   * Static Assets
-   * https://developers.cloudflare.com/workers/static-assets/binding/
-   */
   "assets": {
     "directory": "./docs/",
     "binding": "ASSETS",

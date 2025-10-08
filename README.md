@@ -1,10 +1,10 @@
 ## [Edgebin](https://github.com/jiacai2050/edgebin)
 
 <p align="center">
-  <a href="https://edgebin.liujiacai.net/"><img src="docs/logo.svg" width="30%" /></a>
+  <img src="docs/logo.svg" width="30%" />
 </p>
 
-Edgebin is a minimalist HTTP service designed to test your networking stack, with a focus on edge deployment.
+[Edgebin](https://edgebin.liujiacai.net) is a HTTP testing service, with a focus on edge deployment.
 
 Inspired by the [httpbin.org](https://httpbin.org), it leverages the power of edge computing (Cloudflare Workers) to deliver fast, reliable testing capabilities tailored for modern distributed networks.
 
@@ -70,7 +70,7 @@ All endpoints accept any HTTP method. Additionally, it includes features not fou
   curl "https://edgebin.liujiacai.net/html2md" --data "<h1>Hello, World</h1>"
   ```
 
-- [/page-meta](https://edgebin.liujiacai.net/page-meta?url=https://github.com/jiacai2050/edgebin): Fetches a webpage and extracts its metadata (title, description, image, etc.). Use the `url` query parameter to specify the target webpage.
+- [/page-meta](https://edgebin.liujiacai.net/page-meta?url=https://edgebin.liujiacai.net): Fetches a webpage and extracts its metadata (title, description, image, etc.). Use the `url` query parameter to specify the target webpage.
 
 - [/date](https://edgebin.liujiacai.net/date): Returns current date and time.
   Supports the following query parameters to control output:
