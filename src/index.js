@@ -12,6 +12,7 @@ import {
 import { websocketHandler } from "./ws.js";
 import { handleMix } from "./mix.js";
 import { handleWebhook } from "./webhook.js";
+import { handlePageMeta } from "./page-meta.js";
 
 export default {
   async fetch(req, env, ctx) {
@@ -70,13 +71,27 @@ function addCorsHeaders(resp, origin) {
   return resp;
 }
 
+const STATIC_ROUTES = {
+  "/": "index.html",
+  "/html": "response.html",
+  "/xml": "response.xml",
+  "/json": "response.json",
+  "/deny": "deny.txt",
+  "/version": "version.json",
+  "/image/png": "image.png",
+  "/image/jpeg": "image.jpeg",
+  "/image/webp": "image.webp",
+  "/image/svg": "image.svg",
+};
+
 async function handle(req, env, ctx) {
   const { pathname, searchParams } = new URL(req.url);
-  const parts = pathname.slice(1).split("/");
-  // Index page, return static HTML from assets
-  if (parts.length == 0 || parts[0] === "") {
-    return env.ASSETS.fetch(req);
+  const filename = STATIC_ROUTES[pathname];
+  if (filename) {
+    return env.ASSETS.fetch(new URL(`/${filename}`, req.url));
   }
+
+  const parts = pathname.slice(1).split("/");
   switch (parts[0]) {
     // HTTP methods: Testing different HTTP methods
     case "get":
@@ -165,13 +180,6 @@ async function handle(req, env, ctx) {
         extra: { [key]: true },
       });
     }
-    case "html":
-    case "xml":
-    case "json":
-      // response.html response.xml response.json
-      return env.ASSETS.fetch(new URL(`/response.${parts[0]}`, req.url));
-    case "deny":
-      return env.ASSETS.fetch(new URL(`/deny.txt`, req.url));
 
     // Dynamic data: Generating random and dynamic data
     case "delay": {
@@ -241,6 +249,8 @@ async function handle(req, env, ctx) {
       return await handleMarkdownToHtml(req, searchParams);
     case "html2md":
       return await handleHtmlToMarkdown(req, searchParams);
+    case "page-meta":
+      return await handlePageMeta(req, searchParams);
 
     // Cookies: Returns the cookies sent in the request
     case "cookies":

@@ -126,3 +126,28 @@ export async function sleep(seconds) {
     setTimeout(resolve, Math.min(seconds, 10) * 1000),
   );
 }
+
+export async function getTextInput(req, searchParams) {
+  const url = searchParams.get("url");
+  if (url) {
+    const reqHeaders = new Headers(req.headers);
+    const resp = await fetch(url, {
+      redirect: "follow",
+      headers: reqHeaders,
+    });
+    if (!resp.ok) {
+      throw new CustomError(`Failed to fetch URL: ${url}`, resp.status);
+    }
+    if (!resp.headers.get("Content-Type")?.includes("text")) {
+      throw new CustomError(
+        `URL does not point to a text resource: ${url}`,
+        400,
+      );
+    }
+    return await resp.text();
+  }
+  const text = (await req.text()) || searchParams.get("text");
+  if (text) return text;
+
+  throw new CustomError("No input provided", 400);
+}

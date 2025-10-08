@@ -223,7 +223,7 @@ describe("image", () => {
   it("normal", async () => {
     for (const format of ["png", "jpeg", "webp", "svg"]) {
       const response = await do_request(`${ROOT}/image/${format}`);
-      expect(response.status).toBe(200);
+      expect(response.status, format).toBe(200);
       expect(response.headers.get("Content-Type")).toMatch(
         new RegExp(`image/${format}`),
       );
