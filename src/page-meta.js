@@ -50,8 +50,12 @@ export async function handlePageMeta(req, searchParams) {
       400,
     );
   }
-  if (!response.headers.get("Content-Type")?.includes("text/html")) {
-    return response;
+  const contentType = response.headers.get("Content-Type") || "unknown";
+  if (!contentType.includes("text/html")) {
+    return Response.json({
+      url: response.url,
+      content_type: contentType,
+    });
   }
 
   const titleExtractor = new TitleExtractor();
@@ -65,8 +69,8 @@ export async function handlePageMeta(req, searchParams) {
   return new Response(
     JSON.stringify(
       {
-        title: titleExtractor.title,
         url: response.url, // final URL obtained after any redirects.
+        title: titleExtractor.title,
         ...metaExtractor.metaTags,
       },
       null,

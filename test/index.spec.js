@@ -276,7 +276,9 @@ describe("cookies", () => {
     );
     expect(response.status).toBe(200);
     expect(await response.json()).toMatchObject({
-      // TODO: integration test can't get cookies now.
+      // Unfortunately, we can't get cookies in integration test now.
+      // fetch will not send cookies to same origin even with credentials: 'include'
+      // It works in browser though.
       // cookies: { name1: "value1", name2: "value2", name3: "value3" },
       cookies: {},
     });
@@ -285,12 +287,13 @@ describe("cookies", () => {
 
 describe("anything", () => {
   it("anything json", async () => {
+    const headers = {
+      "user-agent": "Cloudflare Workers",
+      "content-type": "application/json",
+    };
     const req = new Request(`${ROOT}/anything/123?a=1&a=2&a=3&b=4`, {
       method: "PUT",
-      headers: {
-        "User-Agent": "Cloudflare Workers",
-        "Content-Type": "application/json",
-      },
+      headers,
       body: JSON.stringify({ a: 1, b: 2 }),
     });
     const response = await do_request(req);
@@ -300,7 +303,7 @@ describe("anything", () => {
     expect(json["method"]).toStrictEqual("PUT");
     expect(json["json"]).toStrictEqual({ a: 1, b: 2 });
     expect(json["args"]).toStrictEqual({ a: ["1", "2", "3"], b: "4" });
-    expect(json["headers"]).toBeDefined();
+    expect(json["headers"]).toMatchObject(headers);
   });
 
   it("anything form data", async () => {
@@ -332,6 +335,32 @@ describe("anything", () => {
       },
     });
     expect(json["headers"]).toBeDefined();
+  });
+});
+
+describe("page-meta", () => {
+  it("missing url param", async () => {
+    const response = await do_request(`${ROOT}/page-meta`);
+    expect(response.status).toBe(400);
+  });
+
+  it("non-html url", async () => {
+    const response = await do_request(
+      `${ROOT}/page-meta?url=${ROOT}/image/svg`,
+    );
+    expect(response.status).toBe(200);
+    const json = await response.json();
+    expect(json).toMatchObject({
+      url: `${ROOT}/image/svg`,
+      content_type: "image/svg+xml",
+    });
+  });
+
+  it("html url", async () => {
+    const response = await do_request(`${ROOT}/page-meta?url=${ROOT}`);
+    expect(response.status).toBe(200);
+    const json = await response.json();
+    expect(json.url).toBe(`${ROOT}/`);
   });
 });
 
