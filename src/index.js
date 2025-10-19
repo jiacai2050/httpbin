@@ -13,7 +13,7 @@ import { websocketHandler } from "./ws.js";
 import { handleMix } from "./mix.js";
 import { handleWebhook } from "./webhook.js";
 import { handlePageMeta } from "./page-meta.js";
-
+import { serveDirHandle, serveFileHandle } from "./deno.ts";
 export default {
   async fetch(req, env, ctx) {
     try {
@@ -88,7 +88,7 @@ async function handle(req, env, ctx) {
   const { pathname, searchParams } = new URL(req.url);
   const filename = STATIC_ROUTES[pathname];
   if (filename) {
-    return env.ASSETS.fetch(new URL(`/${filename}`, req.url));
+    return serveFileHandle(req, `./docs/${filename}`);
   }
 
   const parts = pathname.slice(1).split("/");
@@ -295,7 +295,7 @@ async function handle(req, env, ctx) {
       return websocketHandler(req);
   }
 
-  return env.ASSETS.fetch(req);
+  return serveDirHandle(req, `./docs`);
 }
 
 function handleBasicAuth(parts, searchParams, req) {

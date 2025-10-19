@@ -1,0 +1,24 @@
+name: "deno"
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - deno
+
+# Allow one concurrent deployment
+concurrency:
+  group: "deno-deploy"
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: "Deploy"
+        run: |
+          deno deploy --prod --token=${{ secrets.DENO_TOKEN }}

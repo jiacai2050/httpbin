@@ -1,0 +1,14 @@
+{
+  "tasks": {
+    "dev": "deno serve --watch --allow-read --allow-net src/index.js",
+    "build": "echo 'no build step required'",
+    "deploy": "deno deploy --prod"
+  },
+  "imports": {
+    "@std/assert": "jsr:@std/assert@1"
+  },
+  "deploy": {
+    "org": "jiacai2050",
+    "app": "edgebin"
+  }
+}

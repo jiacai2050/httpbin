@@ -80,7 +80,7 @@ export function extractIp(req) {
   const cf = req.cf || {};
   return {
     origin:
-      req.headers.get("CF-Connecting-IP") || req.headers.get("X-Forwarded-For"),
+      req.headers.get("cf-connecting-ip") || req.headers.get("x-forwarded-for"),
     continent: cf.continent,
     latitude: cf.latitude,
     longitude: cf.longitude,
