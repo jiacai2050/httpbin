@@ -6,7 +6,11 @@
 
 [Edgebin](https://edgebin.liujiacai.net) is a HTTP testing service, with a focus on edge deployment.
 
-Inspired by the [httpbin.org](https://httpbin.org), it leverages the power of edge computing (Cloudflare Workers) to deliver fast, reliable testing capabilities tailored for modern distributed networks.
+Inspired by the [httpbin.org](https://httpbin.org), it leverages the power of edge computing to deliver fast, reliable testing capabilities tailored for modern distributed networks.
+
+## Supported Platforms
+- [Cloudflare Workers](https://workers.cloudflare.com/). <https://edgebin.liujiacai.net>
+- [Deno Deploy](https://deno.com/deploy) in [deno branch](https://github.com/jiacai2050/edgebin/tree/deno). <https://deno.edgebin.liujiacai.net/>
 
 ## Features
 
